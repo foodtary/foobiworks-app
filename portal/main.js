@@ -186,7 +186,10 @@
     })
       .then(function (res) { return res.json(); })
       .then(function (rows) {
-        if (Array.isArray(rows)) { allOrgEmployees = rows; renderOrgList(""); }
+        if (Array.isArray(rows)) {
+          allOrgEmployees = rows.filter(function (e) { return e.name !== "게스트" && e.team !== "게스트" && e.department !== "게스트"; });
+          renderOrgList("");
+        }
         else { orgList.innerHTML = '<div class="fbw-org-empty">조직도를 불러올 수 없어요</div>'; }
       })
       .catch(function () { orgList.innerHTML = '<div class="fbw-org-empty">조직도를 불러올 수 없어요</div>'; });
