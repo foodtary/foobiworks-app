@@ -48,7 +48,7 @@
   function val(v) { return (v === "" || v === null || v === undefined) ? "-" : v; }
 
   function fillResult(data) {
-    $("#ess-result-name").textContent = data.name + "님";
+    $("#ess-result-name").textContent = String(data.name || "").replace(/\d+$/, "") + "님";   // 동명이인 숫자는 숨김
     $("#ess-hiredate").textContent = val(data.hireDate);
     $("#ess-remaining").textContent = val(data.remainingLeave);
     $("#ess-used").textContent = val(data.usedLeave);

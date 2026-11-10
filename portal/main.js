@@ -142,8 +142,10 @@
     if (!greetName) return;
     $("#fbw-greeting").textContent = greetName + "님, " + greetLine();
   }
+  // 동명이인 구분용으로 붙인 숫자(이은비2)는 화면에 보이지 않게
+  function displayName(n) { return String(n || "").replace(/\d+$/, ""); }
   function startGreeting(name) {
-    greetName = name;
+    greetName = displayName(name);
     renderGreeting();
     if (greetTimer) clearInterval(greetTimer);
     greetTimer = setInterval(renderGreeting, 20 * 60 * 1000);
@@ -424,7 +426,7 @@
     filtered.forEach(function (e) {
       // 한 줄: 이름 · 직책 · 전화번호 · [번호][메일] 복사
       html += '<div class="fbw-person">' +
-        '<span class="fbw-person-name">' + escapeHtml(e.name) + '</span>' +
+        '<span class="fbw-person-name">' + escapeHtml(displayName(e.name)) + '</span>' +
         '<span class="fbw-person-pos">' + escapeHtml(e.job_position || "") + '</span>' +
         (e.phone ? '<span class="fbw-person-phone">' + escapeHtml(e.phone) + '</span>' +
           '<button type="button" class="fbw-copy fbw-icopy" data-copy="' + escapeHtml(e.phone) + '" title="' + escapeHtml(e.phone) + ' 복사" aria-label="' + escapeHtml(e.name) + ' 전화번호 복사">' + ICON_PHONE + '</button>' : '') +
