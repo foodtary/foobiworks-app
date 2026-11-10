@@ -1,0 +1,135 @@
+/* 푸비웍스 위젯 — 자동 생성 파일입니다. 원본은 비공개 저장소 portal/ 에서 수정하세요. */
+(function () {
+  var root = document.getElementById("ess-widget-root");
+  if (!root) return;
+  root.innerHTML = "\n  <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css\" />\n  <style>\n    /* ===== 푸비웍스 마이페이지 — 아임웹 코드 위젯용 ===== */\n    #ess-widget-root, #ess-widget-root * {\n      box-sizing: border-box !important;\n      font-family: \"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", sans-serif !important;\n      line-height: 1.45 !important;\n      letter-spacing: -0.01em;\n    }\n    #ess-widget-root {\n      --ink: #222222;\n      --ink-2: #4a4d52;\n      --muted: #868a90;\n      --line: #e6e7e3;\n      --desk: #f4f4f1;\n      --paper: #ffffff;\n      --danger: #c0392b;\n      max-width: 560px;\n      margin: 0 auto;\n      padding: 8px 4px 40px;\n      color: var(--ink);\n    }\n    #ess-widget-root a { text-decoration: none !important; }\n    #ess-widget-root button { font: inherit; }\n    #ess-widget-root :focus-visible { outline: 2px solid var(--ink) !important; outline-offset: 2px; border-radius: 6px; }\n\n    .ess-loading { text-align: center; font-size: 13px !important; color: var(--muted) !important; padding: 48px 0; display: none; }\n\n    /* 로그인 필요 */\n    .ess-need-login { display: none; text-align: center; padding: 56px 24px; background: var(--paper); border: 1px solid var(--line); border-radius: 18px; }\n    .ess-need-login svg { width: 28px; height: 28px; color: var(--muted); margin-bottom: 14px; }\n    .ess-need-login-text { font-size: 15px !important; font-weight: 600 !important; color: var(--ink) !important; margin: 0 0 20px !important; }\n    .ess-portal-link {\n      display: inline-block; padding: 12px 26px; background: var(--ink); color: #fff !important;\n      border-radius: 999px; font-size: 14px !important; font-weight: 700 !important;\n    }\n\n    /* 결과 */\n    .ess-result { display: none; }\n    .ess-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 4px 2px 18px; }\n    .ess-result-name { font-size: 26px !important; font-weight: 800 !important; margin: 0 !important; letter-spacing: -0.03em; color: var(--ink) !important; }\n    .ess-logout-link {\n      display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; cursor: pointer;\n      font-size: 13px !important; font-weight: 600 !important; color: var(--ink-2) !important;\n      background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px 7px 12px;\n    }\n    .ess-logout-link:hover { background: var(--desk); }\n    .ess-logout-link svg { width: 15px; height: 15px; }\n\n    .ess-panel { background: var(--paper); border: 1px solid var(--line); border-radius: 18px; padding: 24px; }\n    .ess-panel + .ess-panel { margin-top: 14px; }\n\n    /* 연차 — 이 화면의 주인공 */\n    .ess-leave-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }\n    .ess-leave-label { font-size: 14px !important; font-weight: 600 !important; color: var(--ink-2) !important; margin: 0 0 4px !important; }\n    .ess-leave-big { font-size: 56px !important; font-weight: 800 !important; line-height: 1 !important; letter-spacing: -0.04em; color: var(--ink) !important; font-variant-numeric: tabular-nums; }\n    .ess-leave-big small { font-size: 20px !important; font-weight: 700 !important; margin-left: 4px; color: var(--ink-2) !important; letter-spacing: 0; }\n    .ess-leave-side { text-align: right; font-size: 13px !important; color: var(--muted) !important; line-height: 1.7 !important; }\n    .ess-leave-side b { color: var(--ink) !important; font-weight: 700 !important; font-variant-numeric: tabular-nums; }\n    .ess-bar { height: 8px; background: var(--desk); border-radius: 999px; overflow: hidden; margin: 20px 0 0; }\n    .ess-bar-fill { height: 100%; width: 0; background: var(--ink); border-radius: 999px; transition: width .6s ease; }\n    .ess-leave-message { display: none; font-size: 13px !important; color: var(--ink-2) !important; margin: 14px 0 0 !important; }\n\n    /* 정보 행 */\n    .ess-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-top: 1px solid var(--line); }\n    .ess-row:first-child { border-top: 0; padding-top: 0; }\n    .ess-row:last-child { padding-bottom: 0; }\n    .ess-row-label { font-size: 14px !important; color: var(--muted) !important; flex: none; }\n    .ess-row-value { font-size: 15px !important; font-weight: 600 !important; color: var(--ink) !important; display: flex; align-items: center; gap: 10px; min-width: 0; font-variant-numeric: tabular-nums; }\n    .ess-row-value span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n    .ess-mask-btn {\n      font-size: 12px !important; font-weight: 600 !important; color: var(--ink-2) !important;\n      background: var(--desk); border: none; border-radius: 6px; padding: 5px 10px; cursor: pointer; flex: none;\n    }\n    .ess-mask-btn[data-shown=\"true\"] { background: var(--ink); color: #fff !important; }\n\n    @media (max-width: 480px) {\n      .ess-result-name { font-size: 22px !important; }\n      .ess-panel { padding: 20px; }\n      .ess-leave-big { font-size: 46px !important; }\n    }\n    @media (prefers-reduced-motion: reduce) { .ess-bar-fill { transition: none; } }\n  </style>\n\n  <div class=\"ess-loading\" id=\"ess-loading\">불러오는 중…</div>\n\n  <div class=\"ess-need-login\" id=\"ess-need-login\">\n    <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"4\" y=\"11\" width=\"16\" height=\"10\" rx=\"2\"></rect><path d=\"M8 11V7a4 4 0 0 1 8 0v4\"></path></svg>\n    <p class=\"ess-need-login-text\">메인에서 로그인해 주세요</p>\n    <a class=\"ess-portal-link\" href=\"https://foobiworks.imweb.me/\">메인으로</a>\n  </div>\n\n  <div class=\"ess-result\" id=\"ess-result\">\n    <div class=\"ess-head\">\n      <h1 class=\"ess-result-name\" id=\"ess-result-name\"></h1>\n      <button type=\"button\" class=\"ess-logout-link\" id=\"ess-logout\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4\"></path><polyline points=\"16 17 21 12 16 7\"></polyline><line x1=\"21\" y1=\"12\" x2=\"9\" y2=\"12\"></line></svg>로그아웃</button>\n    </div>\n\n    <div class=\"ess-panel\">\n      <div class=\"ess-leave-top\">\n        <div>\n          <p class=\"ess-leave-label\">잔여연차</p>\n          <div class=\"ess-leave-big\"><span id=\"ess-remaining\">-</span><small>일</small></div>\n        </div>\n        <div class=\"ess-leave-side\">\n          사용 <b id=\"ess-used\">-</b><br>\n          제공 <b id=\"ess-total\">-</b>\n        </div>\n      </div>\n      <div class=\"ess-bar\" aria-hidden=\"true\"><div class=\"ess-bar-fill\" id=\"ess-bar-fill\"></div></div>\n      <p class=\"ess-leave-message\" id=\"ess-leave-message\"></p>\n    </div>\n\n    <div class=\"ess-panel\">\n      <div class=\"ess-row\">\n        <div class=\"ess-row-label\">입사일</div>\n        <div class=\"ess-row-value\"><span id=\"ess-hiredate\">-</span></div>\n      </div>\n      <div class=\"ess-row\">\n        <div class=\"ess-row-label\">나스 비밀번호</div>\n        <div class=\"ess-row-value\">\n          <span id=\"ess-nas\">••••••</span>\n          <button type=\"button\" class=\"ess-mask-btn\" data-target=\"nas\">보기</button>\n        </div>\n      </div>\n      <div class=\"ess-row\">\n        <div class=\"ess-row-label\">급여 계좌</div>\n        <div class=\"ess-row-value\">\n          <span id=\"ess-account\">•••••••••••</span>\n          <button type=\"button\" class=\"ess-mask-btn\" data-target=\"account\">보기</button>\n        </div>\n      </div>\n    </div>\n  </div>\n";
+})();
+
+(function () {
+  var SUPABASE_URL = "https://tndxfwomaqydyhspwqth.supabase.co";
+  var SUPABASE_ANON_KEY = "sb_publishable_tisxa5suhn_JK35h9n7-eQ_-amSnaDm";
+  var STORAGE_KEY = "ess_saved_login"; // 메인·데스크톱 앱과 같은 키 → 로그인 공유 (바꾸지 마세요)
+
+  var root = document.getElementById("ess-widget-root");
+  var $ = function (sel) { return root.querySelector(sel); };
+  var loadingBox = $("#ess-loading");
+  var needLoginBox = $("#ess-need-login");
+  var resultBox = $("#ess-result");
+  var logoutLink = $("#ess-logout");
+  var MASK = { nas: "••••••", account: "•••••••••••" };
+  var rawValues = {};
+
+  function getLeaveMessage(remaining, hireDateStr) {
+    var n = Number(remaining);
+    if (isNaN(n)) return null;
+    var isFirstYear = true;
+    if (hireDateStr) {
+      var hd = new Date(hireDateStr);
+      if (!isNaN(hd.getTime())) {
+        var monthsSinceHire = (new Date().getFullYear() - hd.getFullYear()) * 12 + (new Date().getMonth() - hd.getMonth());
+        isFirstYear = monthsSinceHire < 12;
+      }
+    }
+    if (isFirstYear) {
+      if (n <= 0) return "🌱 이번 달 월차까지 알뜰하게 다 쓰셨네요! 다음 달 또 하루 생겨요";
+      if (n <= 1) return "🐿️ 딱 하루 남았어요, 알뜰살뜰 아껴 쓰시는 중이시군요";
+      if (n <= 3) return "😊 적당히 잘 쓰고 계세요, 이 페이스 좋아요";
+      if (n <= 6) return "🍀 월차가 꽤 쌓였어요, 하루 정도 여유 부려보는 건 어때요?";
+      return "☀️ 월차가 넉넉하게 쌓였네요! 이번 달엔 하루 푹 쉬어보는 거 추천드려요";
+    } else {
+      if (n <= 0) return "🌱 연차를 알뜰하게 다 쓰셨네요! 다음 입사기념일에 새 연차가 채워져요";
+      if (n <= 3) return "🐿️ 며칠 안 남았어요, 소중하게 아껴 쓰시는 중이시군요";
+      if (n <= 8) return "😊 딱 적당히 잘 쓰고 계세요, 이 페이스 좋아요";
+      if (n <= 15) return "🍀 연차가 꽤 남았어요, 하루 정도 여유 부려보는 건 어때요?";
+      return "☀️ 연차가 넉넉하게 남았네요! 이번 달엔 하루 푹 쉬어보는 거 추천드려요";
+    }
+  }
+
+  function val(v) { return (v === "" || v === null || v === undefined) ? "-" : v; }
+
+  function fillResult(data) {
+    $("#ess-result-name").textContent = data.name + "님";
+    $("#ess-hiredate").textContent = val(data.hireDate);
+    $("#ess-remaining").textContent = val(data.remainingLeave);
+    $("#ess-used").textContent = val(data.usedLeave);
+    $("#ess-total").textContent = val(data.totalLeave);
+
+    // 남은 비율 막대
+    var rem = Number(data.remainingLeave), tot = Number(data.totalLeave);
+    var pct = (tot > 0 && !isNaN(rem)) ? Math.max(0, Math.min(100, rem / tot * 100)) : 0;
+    setTimeout(function () { $("#ess-bar-fill").style.width = pct + "%"; }, 60);
+
+    var msgEl = $("#ess-leave-message");
+    var leaveMsg = getLeaveMessage(data.remainingLeave, data.hireDate);
+    msgEl.textContent = leaveMsg || "";
+    msgEl.style.display = leaveMsg ? "block" : "none";
+
+    rawValues.nas = data.nasPassword || "-";
+    rawValues.account = (data.bankName ? data.bankName + " " : "") + (data.accountNumber || "-");
+    $("#ess-nas").textContent = MASK.nas;
+    $("#ess-account").textContent = MASK.account;
+    root.querySelectorAll(".ess-mask-btn").forEach(function (btn) {
+      btn.textContent = "보기";
+      btn.dataset.shown = "false";
+    });
+
+    loadingBox.style.display = "none";
+    needLoginBox.style.display = "none";
+    resultBox.style.display = "block";
+  }
+
+  root.querySelectorAll(".ess-mask-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var target = btn.dataset.target;
+      var span = $("#ess-" + target);
+      var shown = btn.dataset.shown === "true";
+      span.textContent = shown ? MASK[target] : rawValues[target];
+      btn.textContent = shown ? "보기" : "숨기기";
+      btn.dataset.shown = shown ? "false" : "true";
+    });
+  });
+
+  logoutLink.addEventListener("click", function () {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    window.location.href = "https://foobiworks.imweb.me/";
+  });
+
+  function showNeedLogin() {
+    loadingBox.style.display = "none";
+    resultBox.style.display = "none";
+    needLoginBox.style.display = "block";
+  }
+
+  (function init() {
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); } catch (e) {}
+    if (!saved || !saved.name || !saved.code) { showNeedLogin(); return; }
+
+    loadingBox.style.display = "block";
+    fetch(SUPABASE_URL + "/rest/v1/rpc/get_employee_info", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "apikey": SUPABASE_ANON_KEY },
+      body: JSON.stringify({ p_name: saved.name, p_code: saved.code })
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (rows) {
+        if (Array.isArray(rows) && rows.length > 0) {
+          var row = rows[0];
+          fillResult({
+            name: row.name,
+            hireDate: row.hire_date,
+            nasPassword: row.nas_password,
+            bankName: row.bank_name,
+            accountNumber: row.account_number,
+            remainingLeave: row.remaining_leave,
+            usedLeave: row.used_leave,
+            totalLeave: row.total_leave
+          });
+        } else {
+          try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+          showNeedLogin();
+        }
+      })
+      .catch(showNeedLogin);
+  })();
+})();

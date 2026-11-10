@@ -1,0 +1,339 @@
+/* 푸비웍스 위젯 — 자동 생성 파일입니다. 원본은 비공개 저장소 portal/ 에서 수정하세요. */
+(function () {
+  var root = document.getElementById("fbw-portal-root");
+  if (!root) return;
+  root.innerHTML = "\n  <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css\" />\n  <style>\n    /* ===== 푸비웍스 메인 — 아임웹 코드 위젯용 (모든 스타일은 #fbw-portal-root 안에서만 적용) ===== */\n    #fbw-portal-root, #fbw-portal-root * {\n      box-sizing: border-box !important;\n      font-family: \"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", sans-serif !important;\n      line-height: 1.45 !important;\n      letter-spacing: -0.01em;\n    }\n    #fbw-portal-root {\n      --ink: #222222;        /* 로고 검정 */\n      --ink-2: #4a4d52;\n      --muted: #868a90;\n      --line: #e6e7e3;\n      --desk: #f4f4f1;       /* 책상 바탕 */\n      --paper: #ffffff;\n      --tab: #d8402c;        /* 탁상 달력 빨간 머리 */\n      --sheet: #188038;      /* 구글시트 초록 */\n      --danger: #c0392b;\n      max-width: 1080px;\n      margin: 0 auto;\n      padding: 8px 4px 40px;\n      color: var(--ink);\n    }\n    #fbw-portal-root a { text-decoration: none !important; color: inherit; }\n    #fbw-portal-root button { font: inherit; }\n    #fbw-portal-root :focus-visible { outline: 2px solid var(--ink) !important; outline-offset: 2px; border-radius: 6px; }\n\n    /* ========== 입장 화면 ========== */\n    .fbw-gate { display: flex; justify-content: center; padding: 32px 0; }\n    .fbw-gate-card {\n      width: 100%; max-width: 820px; min-height: 420px; display: grid; grid-template-columns: 1fr 1fr;\n      background: var(--paper); border: 1px solid var(--line); border-radius: 20px; overflow: hidden;\n    }\n    .fbw-gate-brand {\n      position: relative; background: var(--ink); color: #fff !important;\n      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 40px 24px;\n    }\n    .fbw-gate-logo { width: 84px; height: 84px; border-radius: 20px; display: block; }\n    .fbw-gate-name { font-size: 30px !important; font-weight: 800 !important; margin: 0 !important; color: #fff !important; letter-spacing: -0.03em; }\n    .fbw-gate-form { display: flex; flex-direction: column; justify-content: center; padding: 40px 44px; }\n    .fbw-field { margin-bottom: 12px; }\n    .fbw-field label { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }\n    .fbw-field input {\n      width: 100%; padding: 14px 16px; border: 1px solid transparent; border-radius: 10px;\n      font-size: 15px !important; background: var(--desk); color: var(--ink) !important; outline: none;\n      transition: border-color .15s, background .15s;\n    }\n    .fbw-field input:focus { border-color: var(--ink); background: var(--paper); }\n    .fbw-input-wrap { position: relative; }\n    .fbw-input-wrap input { padding-right: 44px !important; }\n    .fbw-eye-btn {\n      position: absolute; right: 4px; top: 50%; transform: translateY(-50%);\n      background: none; border: none; cursor: pointer; padding: 8px; display: flex; color: var(--muted) !important;\n    }\n    .fbw-eye-btn svg { width: 18px; height: 18px; display: block; }\n    .fbw-capslock-warning { display: none; align-items: center; gap: 5px; font-size: 12px !important; color: var(--danger) !important; margin-top: 6px !important; }\n    .fbw-capslock-warning svg { width: 13px; height: 13px; flex-shrink: 0; }\n    .fbw-btn {\n      width: 100%; padding: 14px; margin-top: 10px; background: var(--ink); color: #fff !important;\n      border: none; border-radius: 999px; font-size: 15px !important; font-weight: 700 !important; cursor: pointer;\n    }\n    .fbw-btn:disabled { opacity: .5; cursor: default; }\n    .fbw-msg { font-size: 13px !important; color: var(--danger) !important; margin-top: 12px; display: none; text-align: center; }\n    .fbw-loading { text-align: center; font-size: 13px !important; color: var(--muted) !important; margin-top: 12px; display: none; }\n    @media (max-width: 680px) {\n      .fbw-gate { padding: 8px 0; }\n      .fbw-gate-card { grid-template-columns: 1fr; min-height: 0; }\n      .fbw-gate-brand { flex-direction: row; padding: 22px; gap: 12px; }\n      .fbw-gate-logo { width: 48px; height: 48px; border-radius: 12px; }\n      .fbw-gate-name { font-size: 22px !important; }\n      .fbw-gate-form { padding: 28px 22px; }\n    }\n\n    /* ========== 대시보드 ========== */\n    .fbw-dashboard { display: none; }\n    .fbw-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 4px 2px 18px; }\n    .fbw-hello { font-size: 26px !important; font-weight: 800 !important; margin: 0 !important; letter-spacing: -0.03em; color: var(--ink) !important; }\n    .fbw-hello-sub { font-size: 14px !important; color: var(--muted) !important; margin: 4px 0 0 !important; }\n    .fbw-logout-link {\n      display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; cursor: pointer;\n      font-size: 13px !important; font-weight: 600 !important; color: var(--ink-2) !important;\n      background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px 7px 12px;\n      transition: background .15s, border-color .15s;\n    }\n    .fbw-logout-link:hover { background: var(--desk); border-color: #d4d6d1; }\n    .fbw-logout-link svg { width: 15px; height: 15px; }\n\n    .fbw-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; align-items: start; }\n    .fbw-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }\n\n    /* 탁상 달력 — 이 화면에서 유일하게 힘을 준 요소 */\n    .fbw-today { display: grid; grid-template-columns: 148px minmax(0, 1fr); background: var(--paper); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }\n    .fbw-cal { border-right: 1px solid var(--line); text-align: center; display: flex; flex-direction: column; }\n    .fbw-cal-head { background: var(--tab); color: #fff !important; font-size: 13px !important; font-weight: 700 !important; padding: 8px 0; }\n    .fbw-cal-day { font-size: 64px !important; font-weight: 800 !important; line-height: 1 !important; letter-spacing: -0.05em; padding: 14px 0 2px; color: var(--ink) !important; font-variant-numeric: tabular-nums; }\n    .fbw-cal-dow { font-size: 14px !important; font-weight: 600 !important; color: var(--ink-2) !important; padding-bottom: 14px; }\n    .fbw-cal-dow.fbw-weekend { color: var(--tab) !important; }\n    .fbw-today-side { padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; min-width: 0; }\n    .fbw-weather-row { display: flex; align-items: center; gap: 12px; }\n    .fbw-weather-emoji { font-size: 34px; line-height: 1 !important; }\n    .fbw-weather-temp { font-size: 22px !important; font-weight: 800 !important; color: var(--ink) !important; }\n    .fbw-weather-desc { font-size: 13px !important; color: var(--muted) !important; }\n    .fbw-weather-loc { margin-left: auto; font-size: 12px !important; color: var(--muted) !important; align-self: flex-start; }\n    .fbw-mypage { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; background: var(--desk); border-radius: 12px; }\n    .fbw-mypage:hover { background: #ebebe6; }\n    .fbw-mypage b { display: block; font-size: 14px !important; font-weight: 700 !important; color: var(--ink) !important; }\n    .fbw-mypage span { font-size: 12px !important; color: var(--muted) !important; }\n    .fbw-mypage svg { width: 18px; height: 18px; flex: none; color: var(--ink-2); }\n\n    /* 바로가기 */\n    .fbw-panel { background: var(--paper); border: 1px solid var(--line); border-radius: 18px; padding: 20px; }\n    .fbw-panel-title { font-size: 15px !important; font-weight: 700 !important; margin: 0 0 14px !important; color: var(--ink) !important; }\n    .fbw-group + .fbw-group { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }\n    .fbw-group-name { font-size: 13px !important; font-weight: 600 !important; color: var(--muted) !important; margin: 0 0 10px !important; }\n    .fbw-apps { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; }\n    .fbw-app { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 6px 10px; border-radius: 12px; }\n    .fbw-app:hover { background: var(--desk); }\n    .fbw-app-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--paper); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; }\n    .fbw-app-icon img { width: 24px; height: 24px; object-fit: contain; }\n    .fbw-app-icon svg { width: 22px; height: 22px; }\n    .fbw-app-label { font-size: 13px !important; font-weight: 500 !important; color: var(--ink) !important; text-align: center; }\n\n    .fbw-sheets { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; }\n    .fbw-sheet { display: flex; align-items: center; gap: 10px; padding: 11px 12px; border: 1px solid var(--line); border-radius: 12px; }\n    .fbw-sheet:hover { background: var(--desk); }\n    .fbw-sheet-icon { width: 30px; height: 30px; border-radius: 8px; background: var(--sheet); display: flex; align-items: center; justify-content: center; flex: none; }\n    .fbw-sheet-icon svg { width: 16px; height: 16px; }\n    .fbw-sheet-label { font-size: 14px !important; font-weight: 600 !important; color: var(--ink) !important; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n\n    /* 조직도 */\n    .fbw-org-head { display: flex; align-items: center; justify-content: space-between; cursor: default; }\n    .fbw-org-head .fbw-panel-title { margin: 0 !important; }\n    .fbw-org-chevron { display: none; color: var(--muted); }\n    .fbw-org-chevron svg { width: 18px; height: 18px; display: block; transition: transform .2s; }\n    .fbw-org-search {\n      width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px;\n      font-size: 14px !important; background: var(--desk); outline: none; margin: 14px 0 6px; color: var(--ink) !important;\n    }\n    .fbw-org-search:focus { border-color: var(--ink); background: var(--paper); }\n    #fbw-org-list { max-height: 640px; overflow-y: auto; margin: 0 -8px; padding: 0 8px; }\n    .fbw-person { padding: 12px 0; border-top: 1px solid var(--line); }\n    .fbw-person:first-child { border-top: 0; }\n    .fbw-person-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }\n    .fbw-person-name { font-size: 15px !important; font-weight: 700 !important; color: var(--ink) !important; }\n    .fbw-person-pos { font-size: 12px !important; color: var(--muted) !important; }\n    .fbw-contact { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 2px 0; }\n    .fbw-contact-value { font-size: 13px !important; color: var(--ink-2) !important; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; }\n    .fbw-copy {\n      font-size: 12px !important; color: var(--ink-2) !important; background: var(--desk);\n      border: none; border-radius: 6px; padding: 4px 9px; cursor: pointer; font-weight: 600 !important; flex: none;\n    }\n    .fbw-copy.fbw-copied { background: var(--ink); color: #fff !important; }\n    .fbw-org-empty { text-align: center; font-size: 13px !important; color: var(--muted) !important; padding: 18px 0; }\n\n\n    /* 플로우 공지·일정 */\n    .fbw-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 12px; }\n    .fbw-panel-head .fbw-panel-title { margin: 0 !important; }\n    .fbw-more { font-size: 13px !important; font-weight: 600 !important; color: var(--muted) !important; }\n    .fbw-more:hover { color: var(--ink) !important; }\n    .fbw-notice { display: flex; align-items: baseline; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line); }\n    .fbw-notice:first-child { border-top: 0; padding-top: 2px; }\n    .fbw-notice-title { flex: 1; min-width: 0; font-size: 14px !important; font-weight: 600 !important; color: var(--ink) !important; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n    .fbw-notice-title em { font-style: normal; font-size: 12px !important; color: var(--muted) !important; font-weight: 500 !important; margin-left: 4px; }\n    .fbw-notice-meta { font-size: 12px !important; color: var(--muted) !important; white-space: nowrap; font-variant-numeric: tabular-nums; }\n    .fbw-new { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--tab); margin-right: 6px; vertical-align: 2px; }\n    .fbw-day { font-size: 12px !important; font-weight: 700 !important; color: var(--ink-2) !important; margin: 14px 0 6px !important; }\n    .fbw-day:first-child { margin-top: 0 !important; }\n    .fbw-day.fbw-is-today { color: var(--tab) !important; }\n    .fbw-event { display: flex; gap: 10px; align-items: baseline; padding: 4px 0; }\n    .fbw-event-time { width: 44px; flex: none; font-size: 12px !important; color: var(--muted) !important; font-variant-numeric: tabular-nums; }\n    .fbw-event-name { flex: 1; min-width: 0; font-size: 14px !important; color: var(--ink) !important; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n    .fbw-event-cal { font-size: 11px !important; color: var(--muted) !important; background: var(--desk); border-radius: 5px; padding: 1px 6px; flex: none; }\n    .fbw-quiet { font-size: 13px !important; color: var(--muted) !important; padding: 6px 0; }\n\n    /* 일정: 날짜 넘기기 + 캘린더별 박스 */\n    .fbw-daynav { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 14px; }\n    .fbw-daynav-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line); background: var(--paper); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--ink-2); }\n    .fbw-daynav-btn:disabled { opacity: .3; cursor: default; }\n    .fbw-daynav-btn svg { width: 14px; height: 14px; }\n    .fbw-daynav-label { font-size: 15px !important; font-weight: 700 !important; color: var(--ink) !important; font-variant-numeric: tabular-nums; }\n    .fbw-today-chip { font-size: 12px !important; font-weight: 600 !important; color: var(--ink-2) !important; border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 3px 10px; cursor: pointer; }\n    .fbw-today-chip[aria-pressed=\"true\"] { background: var(--ink); color: #fff !important; border-color: var(--ink); }\n    .fbw-calbox + .fbw-calbox { margin-top: 10px; }\n    .fbw-calbox { background: var(--desk); border-radius: 12px; padding: 12px 14px; }\n    .fbw-calbox-title { display: flex; align-items: center; justify-content: space-between; font-size: 13px !important; font-weight: 700 !important; color: var(--ink-2) !important; margin: 0 0 8px !important; }\n    .fbw-calbox-title span { font-size: 12px !important; font-weight: 600 !important; color: var(--muted) !important; }\n    .fbw-ev { border-left: 3px solid var(--c, var(--ink)); padding: 2px 0 2px 10px; margin-top: 8px; }\n    .fbw-ev:first-of-type { margin-top: 0; }\n    .fbw-ev-name { font-size: 14px !important; font-weight: 600 !important; color: var(--ink) !important; }\n    .fbw-ev-when { font-size: 12px !important; color: var(--muted) !important; margin-top: 1px; }\n    .fbw-calbox-empty { font-size: 13px !important; color: var(--muted) !important; }\n\n    /* 앱 안내 (브라우저로 들어왔을 때만) */\n    .fbw-appnote { display: none; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; }\n    .fbw-appnote img { width: 32px; height: 32px; border-radius: 8px; flex: none; }\n    .fbw-appnote div { flex: 1; min-width: 0; }\n    .fbw-appnote b { display: block; font-size: 14px !important; color: var(--ink) !important; }\n    .fbw-appnote span { font-size: 12px !important; color: var(--muted) !important; }\n    .fbw-appnote a { font-size: 13px !important; font-weight: 700 !important; color: var(--ink) !important; white-space: nowrap; }\n\n    /* ===== 좁은 화면 ===== */\n    @media (max-width: 900px) {\n      .fbw-grid { grid-template-columns: 1fr; }\n      .fbw-org-head { cursor: pointer; }\n      .fbw-org-chevron { display: block; }\n      .fbw-org-body { display: none; }\n      .fbw-org.fbw-open .fbw-org-body { display: block; }\n      .fbw-org.fbw-open .fbw-org-chevron svg { transform: rotate(180deg); }\n      #fbw-org-list { max-height: none; }\n    }\n    @media (max-width: 520px) {\n      .fbw-hello { font-size: 22px !important; }\n      .fbw-today { grid-template-columns: 112px minmax(0, 1fr); }\n      .fbw-cal-day { font-size: 48px !important; }\n      .fbw-today-side { padding: 14px; }\n      .fbw-apps { grid-template-columns: repeat(4, 1fr); }\n      .fbw-app-label { font-size: 12px !important; }\n      .fbw-sheets { grid-template-columns: 1fr; }\n    }\n    @media (prefers-reduced-motion: reduce) {\n      #fbw-portal-root * { transition: none !important; }\n    }\n  </style>\n\n  <!-- ===== 입장 화면 ===== -->\n  <div class=\"fbw-gate\" id=\"fbw-gate\">\n    <div class=\"fbw-gate-card\">\n      <div class=\"fbw-gate-brand\">\n        <img class=\"fbw-gate-logo\" src=\"https://foodtary.github.io/foobiworks-app/icon.png\" alt=\"\" />\n        <h1 class=\"fbw-gate-name\">푸비웍스</h1>\n      </div>\n      <div class=\"fbw-gate-form\">\n        <div class=\"fbw-field\">\n          <label for=\"fbw-name\">이름</label>\n          <input type=\"text\" id=\"fbw-name\" placeholder=\"이름\" autocomplete=\"off\" />\n        </div>\n        <div class=\"fbw-field\">\n          <label for=\"fbw-code\">코드</label>\n          <div class=\"fbw-input-wrap\">\n            <input type=\"password\" id=\"fbw-code\" placeholder=\"코드\" autocomplete=\"off\" />\n            <button type=\"button\" class=\"fbw-eye-btn\" id=\"fbw-code-eye\" aria-label=\"코드 보기\">\n              <svg id=\"fbw-eye-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z\"></path><circle cx=\"12\" cy=\"12\" r=\"3\"></circle></svg>\n            </button>\n          </div>\n          <div class=\"fbw-capslock-warning\" id=\"fbw-capslock-warning\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"></path><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"13\"></line><line x1=\"12\" y1=\"17\" x2=\"12.01\" y2=\"17\"></line></svg>\n            Caps Lock 켜짐\n          </div>\n        </div>\n        <button class=\"fbw-btn\" id=\"fbw-submit\">입장하기</button>\n        <div class=\"fbw-msg\" id=\"fbw-msg\"></div>\n        <div class=\"fbw-loading\" id=\"fbw-loading\">확인 중…</div>\n      </div>\n    </div>\n  </div>\n\n  <!-- ===== 대시보드 ===== -->\n  <div class=\"fbw-dashboard\" id=\"fbw-dashboard\">\n    <div class=\"fbw-top\">\n      <div>\n        <h1 class=\"fbw-hello\" id=\"fbw-greeting\">안녕하세요</h1>\n        <p class=\"fbw-hello-sub\" id=\"fbw-date\"></p>\n      </div>\n      <button type=\"button\" class=\"fbw-logout-link\" id=\"fbw-logout\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4\"></path><polyline points=\"16 17 21 12 16 7\"></polyline><line x1=\"21\" y1=\"12\" x2=\"9\" y2=\"12\"></line></svg>로그아웃</button>\n    </div>\n\n    <div class=\"fbw-grid\">\n      <!-- 왼쪽 -->\n      <div class=\"fbw-col\">\n        <div class=\"fbw-today\">\n          <div class=\"fbw-cal\" aria-hidden=\"true\">\n            <div class=\"fbw-cal-head\" id=\"fbw-cal-month\">11월</div>\n            <div class=\"fbw-cal-day\" id=\"fbw-cal-day\">10</div>\n            <div class=\"fbw-cal-dow\" id=\"fbw-cal-dow\">화요일</div>\n          </div>\n          <div class=\"fbw-today-side\">\n            <div class=\"fbw-weather-row\" id=\"fbw-weather-row\">\n              <span class=\"fbw-weather-emoji\" id=\"fbw-weather-emoji\">⛅</span>\n              <div>\n                <div class=\"fbw-weather-temp\" id=\"fbw-weather-temp\">--°</div>\n                <div class=\"fbw-weather-desc\" id=\"fbw-weather-desc\">날씨 불러오는 중</div>\n              </div>\n              <span class=\"fbw-weather-loc\" id=\"fbw-weather-loc\">평택</span>\n            </div>\n            <a class=\"fbw-mypage\" href=\"https://foobiworks.imweb.me/myinfo\">\n              <div><b>마이페이지</b><span>잔여연차 · 입사일 · 계정정보</span></div>\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"9 18 15 12 9 6\"></polyline></svg>\n            </a>\n          </div>\n        </div>\n\n\n        <div class=\"fbw-panel\">\n          <div class=\"fbw-panel-head\">\n            <h2 class=\"fbw-panel-title\">공지</h2>\n            <a class=\"fbw-more\" href=\"https://flow.team/main.act?projectId=2590229\" target=\"_blank\" rel=\"noopener\">플로우에서 보기</a>\n          </div>\n          <div id=\"fbw-notices\"><div class=\"fbw-quiet\">불러오는 중…</div></div>\n        </div>\n\n        <div class=\"fbw-panel\">\n          <h2 class=\"fbw-panel-title\">바로가기</h2>\n\n          <div class=\"fbw-group\">\n            <p class=\"fbw-group-name\">협업</p>\n            <div class=\"fbw-apps\">\n              <a class=\"fbw-app\" href=\"https://flow.team/main.act\" target=\"_blank\" rel=\"noopener\">\n                <span class=\"fbw-app-icon\"><img src=\"https://www.google.com/s2/favicons?sz=64&domain=flow.team\" alt=\"\" /></span>\n                <span class=\"fbw-app-label\">플로우</span>\n              </a>\n              <a class=\"fbw-app\" href=\"https://mail.worksmobile.com/w/all?t=1728031016545\" target=\"_blank\" rel=\"noopener\">\n                <span class=\"fbw-app-icon\"><img src=\"https://www.google.com/s2/favicons?sz=64&domain=worksmobile.com\" alt=\"\" /></span>\n                <span class=\"fbw-app-label\">네이버웍스</span>\n              </a>\n              <a class=\"fbw-app\" href=\"https://192.168.0.13:5001/\" target=\"_blank\" rel=\"noopener\">\n                <span class=\"fbw-app-icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#4a4d52\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2\" y=\"4\" width=\"20\" height=\"7\" rx=\"2\"></rect><rect x=\"2\" y=\"13\" width=\"20\" height=\"7\" rx=\"2\"></rect><line x1=\"6\" y1=\"7.5\" x2=\"6.01\" y2=\"7.5\"></line><line x1=\"6\" y1=\"16.5\" x2=\"6.01\" y2=\"16.5\"></line></svg></span>\n                <span class=\"fbw-app-label\">나스</span>\n              </a>\n            </div>\n          </div>\n\n          <div class=\"fbw-group\">\n            <p class=\"fbw-group-name\">AI와 디자인</p>\n            <div class=\"fbw-apps\">\n              <a class=\"fbw-app\" href=\"https://chatgpt.com/\" target=\"_blank\" rel=\"noopener\">\n                <span class=\"fbw-app-icon\"><img src=\"https://www.google.com/s2/favicons?sz=64&domain=chatgpt.com\" alt=\"\" /></span>\n                <span class=\"fbw-app-label\">GPT</span>\n              </a>\n              <a class=\"fbw-app\" href=\"https://claude.ai\" target=\"_blank\" rel=\"noopener\">\n                <span class=\"fbw-app-icon\"><img src=\"https://www.google.com/s2/favicons?sz=64&domain=claude.ai\" alt=\"\" /></span>\n                <span class=\"fbw-app-label\">클로드</span>\n              </a>\n              <a class=\"fbw-app\" href=\"https://www.perplexity.ai/\" target=\"_blank\" rel=\"noopener\">\n                <span class=\"fbw-app-icon\"><img src=\"https://www.google.com/s2/favicons?sz=64&domain=perplexity.ai\" alt=\"\" /></span>\n                <span class=\"fbw-app-label\">퍼플렉시티</span>\n              </a>\n              <a class=\"fbw-app\" href=\"https://www.miricanvas.com/ko/workspace/drive\" target=\"_blank\" rel=\"noopener\">\n                <span class=\"fbw-app-icon\"><img src=\"https://www.google.com/s2/favicons?sz=64&domain=miricanvas.com\" alt=\"\" /></span>\n                <span class=\"fbw-app-label\">미리캔버스</span>\n              </a>\n            </div>\n          </div>\n\n          <div class=\"fbw-group\">\n            <p class=\"fbw-group-name\">업무 시트</p>\n            <div class=\"fbw-sheets\">\n              <a class=\"fbw-sheet\" href=\"https://docs.google.com/spreadsheets/d/1ukfIT4yLD3-hv6C6BHOlo-EhVRKh-rut7Rj0u02xLmg/edit?pli=1&gid=1471020254#gid=1471020254\" target=\"_blank\" rel=\"noopener\">\n                <span class=\"fbw-sheet-icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\"><rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"2\"/><line x1=\"4\" y1=\"10\" x2=\"20\" y2=\"10\"/><line x1=\"4\" y1=\"15\" x2=\"20\" y2=\"15\"/><line x1=\"10\" y1=\"10\" x2=\"10\" y2=\"20\"/></svg></span>\n                <span class=\"fbw-sheet-label\">업체 현황 조회</span>\n              </a>\n              <a class=\"fbw-sheet\" href=\"https://docs.google.com/spreadsheets/d/1CcOtZ_3EeO162i3hcp9M_XOV6WeJpHSiW6gQN6ljFRg/edit?gid=1574504326#gid=1574504326\" target=\"_blank\" rel=\"noopener\">\n                <span class=\"fbw-sheet-icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\"><rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"2\"/><line x1=\"4\" y1=\"10\" x2=\"20\" y2=\"10\"/><line x1=\"4\" y1=\"15\" x2=\"20\" y2=\"15\"/><line x1=\"10\" y1=\"10\" x2=\"10\" y2=\"20\"/></svg></span>\n                <span class=\"fbw-sheet-label\">대행 업체 세부 관리</span>\n              </a>\n              <a class=\"fbw-sheet\" href=\"https://docs.google.com/spreadsheets/d/1NVaQmTe7MmAn17OBZM8yp2YJXdEMaD0oqIXjUoXojD0/edit?gid=2053382754#gid=2053382754\" target=\"_blank\" rel=\"noopener\">\n                <span class=\"fbw-sheet-icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\"><rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"2\"/><line x1=\"4\" y1=\"10\" x2=\"20\" y2=\"10\"/><line x1=\"4\" y1=\"15\" x2=\"20\" y2=\"15\"/><line x1=\"10\" y1=\"10\" x2=\"10\" y2=\"20\"/></svg></span>\n                <span class=\"fbw-sheet-label\">컨설팅 업체 관리</span>\n              </a>\n              <a class=\"fbw-sheet\" href=\"https://docs.google.com/spreadsheets/d/1BLaN9DfI9tB0EFtNUxQsOfgCYH7y6zChK8vOffvWcxQ/edit?gid=767740550#gid=767740550\" target=\"_blank\" rel=\"noopener\">\n                <span class=\"fbw-sheet-icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\"><rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"2\"/><line x1=\"4\" y1=\"10\" x2=\"20\" y2=\"10\"/><line x1=\"4\" y1=\"15\" x2=\"20\" y2=\"15\"/><line x1=\"10\" y1=\"10\" x2=\"10\" y2=\"20\"/></svg></span>\n                <span class=\"fbw-sheet-label\">대행 기초 설문 DB</span>\n              </a>\n              <a class=\"fbw-sheet\" href=\"https://docs.google.com/spreadsheets/d/1_CTte65bP-wWz6_PtlGbsYjUI34C15kM7mE6bscraDM/edit?gid=1474051702#gid=1474051702\" target=\"_blank\" rel=\"noopener\">\n                <span class=\"fbw-sheet-icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\"><rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"2\"/><line x1=\"4\" y1=\"10\" x2=\"20\" y2=\"10\"/><line x1=\"4\" y1=\"15\" x2=\"20\" y2=\"15\"/><line x1=\"10\" y1=\"10\" x2=\"10\" y2=\"20\"/></svg></span>\n                <span class=\"fbw-sheet-label\">B2B 브랜드 설문 DB</span>\n              </a>\n            </div>\n          </div>\n        </div>\n\n        <div class=\"fbw-appnote\" id=\"fbw-appnote\">\n          <img src=\"https://foodtary.github.io/foobiworks-app/icon.png\" alt=\"\" />\n          <div><b>푸비웍스 데스크톱 앱</b></div>\n          <a href=\"https://foodtary.github.io/foobiworks-app/\" target=\"_blank\" rel=\"noopener\">앱 받기</a>\n        </div>\n      </div>\n\n      <!-- 오른쪽: 일정, 조직도 -->\n      <div class=\"fbw-col\">\n        <div class=\"fbw-panel\">\n          <div class=\"fbw-panel-head\">\n            <h2 class=\"fbw-panel-title\">일정</h2>\n            <button type=\"button\" class=\"fbw-today-chip\" id=\"fbw-today-btn\" aria-pressed=\"true\">오늘</button>\n          </div>\n          <div class=\"fbw-daynav\">\n            <button type=\"button\" class=\"fbw-daynav-btn\" id=\"fbw-day-prev\" aria-label=\"이전 날\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"15 18 9 12 15 6\"></polyline></svg></button>\n            <span class=\"fbw-daynav-label\" id=\"fbw-day-label\"></span>\n            <button type=\"button\" class=\"fbw-daynav-btn\" id=\"fbw-day-next\" aria-label=\"다음 날\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"9 18 15 12 9 6\"></polyline></svg></button>\n          </div>\n          <div id=\"fbw-events\"><div class=\"fbw-quiet\">불러오는 중…</div></div>\n        </div>\n\n        <div class=\"fbw-panel fbw-org\" id=\"fbw-org-card\">\n          <div class=\"fbw-org-head\" id=\"fbw-org-toggle\">\n            <h2 class=\"fbw-panel-title\">조직도</h2>\n            <span class=\"fbw-org-chevron\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"6 9 12 15 18 9\"></polyline></svg></span>\n          </div>\n          <div class=\"fbw-org-body\">\n            <input type=\"text\" class=\"fbw-org-search\" id=\"fbw-org-search\" placeholder=\"이름 검색\" />\n            <div id=\"fbw-org-list\"><div class=\"fbw-org-empty\">불러오는 중…</div></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n";
+})();
+
+(function () {
+  var SUPABASE_URL = "https://tndxfwomaqydyhspwqth.supabase.co";
+  var SUPABASE_ANON_KEY = "sb_publishable_tisxa5suhn_JK35h9n7-eQ_-amSnaDm";
+  var STORAGE_KEY = "ess_saved_login"; // 마이페이지·데스크톱 앱과 같은 키 → 자동 연동 (바꾸지 마세요)
+
+  // 날씨 위치 (평택)
+  var WEATHER_LAT = 36.9921;
+  var WEATHER_LON = 127.1129;
+  var WEATHER_LABEL = "평택";
+
+  var root = document.getElementById("fbw-portal-root");
+  var $ = function (sel) { return root.querySelector(sel); };
+  var gateBox = $("#fbw-gate");
+  var dashboard = $("#fbw-dashboard");
+  var nameInput = $("#fbw-name");
+  var codeInput = $("#fbw-code");
+  var submitBtn = $("#fbw-submit");
+  var msgBox = $("#fbw-msg");
+  var loadingBox = $("#fbw-loading");
+  var logoutLink = $("#fbw-logout");
+
+  // ---- 코드 보기/숨기기 ----
+  var codeEyeBtn = $("#fbw-code-eye");
+  var codeEyeIcon = $("#fbw-eye-icon");
+  var EYE_OPEN = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+  var EYE_CLOSED = '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.5 18.5 0 0 1 5.06-5.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+  codeEyeBtn.addEventListener("click", function () {
+    var isPassword = codeInput.type === "password";
+    codeInput.type = isPassword ? "text" : "password";
+    codeEyeIcon.innerHTML = isPassword ? EYE_CLOSED : EYE_OPEN;
+    codeEyeBtn.setAttribute("aria-label", isPassword ? "코드 숨기기" : "코드 보기");
+  });
+
+  // ---- Caps Lock 안내 ----
+  var capsWarning = $("#fbw-capslock-warning");
+  function checkCapsLock(e) {
+    var isOn = false;
+    try { isOn = e.getModifierState && e.getModifierState("CapsLock"); } catch (err) {}
+    capsWarning.style.display = isOn ? "flex" : "none";
+  }
+  codeInput.addEventListener("keydown", checkCapsLock);
+  codeInput.addEventListener("keyup", checkCapsLock);
+  codeInput.addEventListener("blur", function () { capsWarning.style.display = "none"; });
+
+  function showMsg(text) { msgBox.textContent = text; msgBox.style.display = "block"; }
+  function clearMsg() { msgBox.style.display = "none"; }
+
+  // ---- 인사·날짜 ----
+  var DAYS = ["일", "월", "화", "수", "목", "금", "토"];
+  function fillToday() {
+    var d = new Date();
+    $("#fbw-cal-month").textContent = (d.getMonth() + 1) + "월";
+    $("#fbw-cal-day").textContent = d.getDate();
+    var dow = $("#fbw-cal-dow");
+    dow.textContent = DAYS[d.getDay()] + "요일";
+    dow.classList.toggle("fbw-weekend", d.getDay() === 0 || d.getDay() === 6);
+    $("#fbw-date").textContent = d.getFullYear() + "년 " + (d.getMonth() + 1) + "월 " + d.getDate() + "일 " + DAYS[d.getDay()] + "요일";
+  }
+
+  // ---- 날씨 ----
+  var WEATHER_MAP = {
+    0: ["맑음", "☀️"], 1: ["대체로 맑음", "🌤️"], 2: ["구름 조금", "⛅"], 3: ["흐림", "☁️"],
+    45: ["안개", "🌫️"], 48: ["안개", "🌫️"],
+    51: ["가랑비", "🌦️"], 53: ["가랑비", "🌦️"], 55: ["가랑비", "🌦️"],
+    61: ["비", "🌧️"], 63: ["비", "🌧️"], 65: ["강한 비", "🌧️"],
+    71: ["눈", "🌨️"], 73: ["눈", "🌨️"], 75: ["강한 눈", "❄️"],
+    80: ["소나기", "🌦️"], 81: ["소나기", "🌦️"], 82: ["강한 소나기", "⛈️"],
+    95: ["뇌우", "⛈️"], 96: ["뇌우", "⛈️"], 99: ["뇌우", "⛈️"]
+  };
+  function loadWeather() {
+    $("#fbw-weather-loc").textContent = WEATHER_LABEL;
+    var url = "https://api.open-meteo.com/v1/forecast?latitude=" + WEATHER_LAT +
+      "&longitude=" + WEATHER_LON + "&current=temperature_2m,weather_code&timezone=Asia%2FSeoul";
+    fetch(url)
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        var cur = data.current;
+        if (!cur) return;
+        var info = WEATHER_MAP[cur.weather_code] || ["맑음", "🌤️"];
+        $("#fbw-weather-temp").textContent = Math.round(cur.temperature_2m) + "°C";
+        $("#fbw-weather-desc").textContent = info[0];
+        $("#fbw-weather-emoji").textContent = info[1];
+      })
+      .catch(function () { $("#fbw-weather-desc").textContent = "—"; });
+  }
+
+  // 데스크톱 앱이 아닌 브라우저에서만 앱 안내 보이기
+  function showAppNote() {
+    var inApp = /Electron/i.test(navigator.userAgent || "");
+    $("#fbw-appnote").style.display = inApp ? "none" : "flex";
+  }
+
+  function showDashboard(name) {
+    gateBox.style.display = "none";
+    dashboard.style.display = "block";
+    $("#fbw-greeting").textContent = name + "님, 안녕하세요";
+    fillToday();
+    loadWeather();
+    showAppNote();
+  }
+
+  // ---- 조직도 ----
+  var orgSearch = $("#fbw-org-search");
+  var orgList = $("#fbw-org-list");
+  var orgCard = $("#fbw-org-card");
+  var orgToggle = $("#fbw-org-toggle");
+  var allOrgEmployees = [];
+
+  // 좁은 화면에서만 접고 펼치기
+  orgToggle.addEventListener("click", function () { orgCard.classList.toggle("fbw-open"); });
+
+  var RANK_ORDER = ["대표", "본부장", "사무장", "실장", "팀장", "매니저", "PD", "작가"];
+  function rankIndex(position) {
+    var idx = RANK_ORDER.indexOf(position);
+    return idx === -1 ? RANK_ORDER.length : idx;
+  }
+  function escapeHtml(str) {
+    return String(str || "").replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function copyToClipboard(text, btn) {
+    function done() {
+      var original = btn.textContent;
+      btn.textContent = "복사됨";
+      btn.classList.add("fbw-copied");
+      setTimeout(function () { btn.textContent = original; btn.classList.remove("fbw-copied"); }, 1200);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(function () { fallbackCopy(text, done); });
+    } else { fallbackCopy(text, done); }
+  }
+  function fallbackCopy(text, done) {
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); done(); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  function renderOrgList(filterText) {
+    var filtered = allOrgEmployees.filter(function (e) {
+      return !filterText || (e.name || "").indexOf(filterText) !== -1;
+    });
+    if (filtered.length === 0) {
+      orgList.innerHTML = '<div class="fbw-org-empty">' + (filterText ? '"' + escapeHtml(filterText) + '" 검색 결과 없음' : '없음') + '</div>';
+      return;
+    }
+    filtered.sort(function (a, b) {
+      var r = rankIndex(a.job_position) - rankIndex(b.job_position);
+      return r !== 0 ? r : (a.name || "").localeCompare(b.name || "");
+    });
+    var html = "";
+    filtered.forEach(function (e) {
+      html += '<div class="fbw-person">';
+      html += '<div class="fbw-person-head"><span class="fbw-person-name">' + escapeHtml(e.name) + '</span><span class="fbw-person-pos">' + escapeHtml(e.job_position || "") + '</span></div>';
+      if (e.phone) {
+        html += '<div class="fbw-contact"><span class="fbw-contact-value">' + escapeHtml(e.phone) + '</span>' +
+                '<button type="button" class="fbw-copy" data-copy="' + escapeHtml(e.phone) + '" aria-label="' + escapeHtml(e.name) + ' 전화번호 복사">복사</button></div>';
+      }
+      if (e.email) {
+        html += '<div class="fbw-contact"><span class="fbw-contact-value">' + escapeHtml(e.email) + '</span>' +
+                '<button type="button" class="fbw-copy" data-copy="' + escapeHtml(e.email) + '" aria-label="' + escapeHtml(e.name) + ' 이메일 복사">복사</button></div>';
+      }
+      html += '</div>';
+    });
+    orgList.innerHTML = html;
+    orgList.querySelectorAll(".fbw-copy").forEach(function (btn) {
+      btn.addEventListener("click", function () { copyToClipboard(btn.getAttribute("data-copy"), btn); });
+    });
+  }
+  orgSearch.addEventListener("input", function () { renderOrgList(orgSearch.value.trim()); });
+
+  function loadOrgDirectory(name, code) {
+    fetch(SUPABASE_URL + "/rest/v1/rpc/get_org_directory", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "apikey": SUPABASE_ANON_KEY },
+      body: JSON.stringify({ p_name: name, p_code: code })
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (rows) {
+        if (Array.isArray(rows)) { allOrgEmployees = rows; renderOrgList(""); }
+        else { orgList.innerHTML = '<div class="fbw-org-empty">조직도를 불러올 수 없어요</div>'; }
+      })
+      .catch(function () { orgList.innerHTML = '<div class="fbw-org-empty">조직도를 불러올 수 없어요</div>'; });
+  }
+
+
+  // ---- 플로우 공지·회사 일정 (알림 서버를 거쳐 가져옴 — 플로우 키는 페이지에 없음) ----
+  var BOARD_API = "https://script.google.com/macros/s/AKfycbyTDq9xMIO4hiLuunzaZBD_955XhZvQDDW0dM-egEjCYQ79pxRaLCIpNWx_o0h2yQz4pQ/exec";
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function sameDay(a, b) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
+  function shortDate(iso) {
+    var d = new Date(iso); if (isNaN(d)) return "";
+    var now = new Date();
+    if (sameDay(d, now)) return pad(d.getHours()) + ":" + pad(d.getMinutes());
+    var y = new Date(now); y.setDate(now.getDate() - 1);
+    if (sameDay(d, y)) return "어제";
+    return (d.getMonth() + 1) + "/" + d.getDate();
+  }
+  function dayLabel(d) {
+    var now = new Date(), t = new Date(now); t.setDate(now.getDate() + 1);
+    if (sameDay(d, now)) return "오늘";
+    if (sameDay(d, t)) return "내일";
+    return (d.getMonth() + 1) + "/" + d.getDate() + " (" + DAYS[d.getDay()] + ")";
+  }
+  function renderNotices(list, failed) {
+    var box = $("#fbw-notices");
+    if (failed) { box.innerHTML = '<div class="fbw-quiet">공지를 불러올 수 없어요</div>'; return; }
+    if (!list.length) { box.innerHTML = '<div class="fbw-quiet">새 공지 없음</div>'; return; }
+    var now = Date.now();
+    box.innerHTML = list.map(function (n) {
+      var fresh = n.date && (now - new Date(n.date).getTime()) < 2 * 24 * 3600 * 1000;
+      return '<a class="fbw-notice" href="https://flow.team/main.act?projectId=2590229" target="_blank" rel="noopener">' +
+        '<span class="fbw-notice-title">' + (fresh ? '<i class="fbw-new" aria-label="새 글"></i>' : '') + escapeHtml(n.title) +
+        (n.comments ? '<em>[' + n.comments + ']</em>' : '') + '</span>' +
+        '<span class="fbw-notice-meta">' + escapeHtml(n.author) + ' ' + shortDate(n.date) + '</span></a>';
+    }).join("");
+  }
+  // 캘린더별 박스 (순서·이름·색 — 플로우 캘린더 색과 맞춤)
+  var CAL_BOXES = [
+    { key: "사내공지", title: "사내 일정", color: "#7A523F" },
+    { key: "휴무", title: "휴무", color: "#434AB6" },
+    { key: "촬영", title: "촬영", color: "#E0A100" }
+  ];
+  var allEvents = null, eventsFailed = false, dayOffset = 0, MAX_DAYS = 29;
+  function toDate(v) { return new Date(v && v.length === 10 ? v + "T00:00:00+09:00" : v); }
+  function ymd(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function fmtDay(d) { return pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + " (" + DAYS[d.getDay()] + ")"; }
+  function whenText(e) {
+    var s = toDate(e.start), en = e.end ? toDate(e.end) : s;
+    var allDay = e.allDay || e.start.length === 10;
+    if (!sameDay(s, en)) return fmtDay(s) + " ~ " + fmtDay(en) + (allDay ? ", 종일" : "");
+    return allDay ? "종일" : pad(s.getHours()) + ":" + pad(s.getMinutes()) + " ~ " + pad(en.getHours()) + ":" + pad(en.getMinutes());
+  }
+  function renderEvents(list, failed) {
+    if (list !== undefined) { allEvents = list; eventsFailed = !!failed; }
+    var day = new Date(); day.setHours(0, 0, 0, 0); day.setDate(day.getDate() + dayOffset);
+    var dayEnd = new Date(day); dayEnd.setDate(day.getDate() + 1);
+    $("#fbw-day-label").textContent = fmtDay(day);
+    $("#fbw-day-prev").disabled = dayOffset <= 0;
+    $("#fbw-day-next").disabled = dayOffset >= MAX_DAYS;
+    $("#fbw-today-btn").setAttribute("aria-pressed", dayOffset === 0 ? "true" : "false");
+    var box = $("#fbw-events");
+    if (allEvents === null) return;
+    if (eventsFailed) { box.innerHTML = '<div class="fbw-quiet">일정을 불러올 수 없어요</div>'; return; }
+    var todays = allEvents.filter(function (e) {
+      var s = toDate(e.start), en = e.end ? toDate(e.end) : s;
+      return s < dayEnd && en >= day;               // 그날에 걸친 일정 (여러 날 일정 포함)
+    });
+    box.innerHTML = CAL_BOXES.map(function (c) {
+      var items = todays.filter(function (e) { return e.calendar === c.key; });
+      var body = items.length ? items.map(function (e) {
+        var color = /^#[0-9a-fA-F]{6}$/.test(e.color || "") ? e.color : c.color;   // 일정 색 → 없으면 캘린더 색
+        return '<div class="fbw-ev" style="--c:' + color + '"><div class="fbw-ev-name">' + escapeHtml(e.name) + '</div><div class="fbw-ev-when">' + whenText(e) + '</div></div>';
+      }).join("") : '<div class="fbw-calbox-empty">없음</div>';
+      return '<div class="fbw-calbox"><p class="fbw-calbox-title">' + c.title + (items.length ? '<span>' + items.length + '건</span>' : '') + '</p>' + body + '</div>';
+    }).join("");
+  }
+  $("#fbw-day-prev").addEventListener("click", function () { if (dayOffset > 0) { dayOffset--; renderEvents(); } });
+  $("#fbw-day-next").addEventListener("click", function () { if (dayOffset < MAX_DAYS) { dayOffset++; renderEvents(); } });
+  $("#fbw-today-btn").addEventListener("click", function () { dayOffset = 0; renderEvents(); });
+  renderEvents();
+  function loadBoard(name, code) {
+    fetch(BOARD_API, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "board", name: name, code: code }) })
+      .then(function (r) { return r.json(); })
+      .then(function (r) {
+        if (!r.ok) { renderNotices([], true); renderEvents([], true); return; }
+        renderNotices(r.notices || [], !!r.noticeError);
+        renderEvents(r.events || [], !!r.eventError);
+      })
+      .catch(function () { renderNotices([], true); renderEvents([], true); });
+  }
+
+  // ---- 로그인 ----
+  function doLookup(name, code, isAutoLogin) {
+    clearMsg();
+    if (!name || !code) { showMsg("이름과 코드를 입력해 주세요."); return; }
+    submitBtn.disabled = true;
+    loadingBox.style.display = "block";
+
+    fetch(SUPABASE_URL + "/rest/v1/rpc/get_employee_info", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "apikey": SUPABASE_ANON_KEY },
+      body: JSON.stringify({ p_name: name, p_code: code })
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (rows) {
+        loadingBox.style.display = "none";
+        submitBtn.disabled = false;
+        if (Array.isArray(rows) && rows.length > 0) {
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: name, code: code })); } catch (e) {}
+          showDashboard(rows[0].name);
+          loadOrgDirectory(name, code);
+          loadBoard(name, code);
+        } else {
+          if (isAutoLogin) { try { localStorage.removeItem(STORAGE_KEY); } catch (e) {} }
+          else { showMsg("이름 또는 코드가 일치하지 않습니다."); }
+        }
+      })
+      .catch(function () {
+        loadingBox.style.display = "none";
+        submitBtn.disabled = false;
+        if (!isAutoLogin) showMsg("네트워크 오류. 다시 시도해 주세요.");
+      });
+  }
+
+  submitBtn.addEventListener("click", function () { doLookup(nameInput.value.trim(), codeInput.value.trim(), false); });
+  [nameInput, codeInput].forEach(function (input) {
+    input.addEventListener("keydown", function (e) { if (e.key === "Enter") submitBtn.click(); });
+  });
+
+  logoutLink.addEventListener("click", function () {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    dashboard.style.display = "none";
+    gateBox.style.display = "flex";
+    nameInput.value = "";
+    codeInput.value = "";
+    nameInput.focus();
+  });
+
+  (function tryAutoLogin() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      if (saved && saved.name && saved.code) {
+        nameInput.value = saved.name;
+        codeInput.value = saved.code;
+        doLookup(saved.name, saved.code, true);
+      }
+    } catch (e) {}
+  })();
+})();
