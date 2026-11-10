@@ -76,6 +76,18 @@
     95: ["뇌우", "⛈️"], 96: ["뇌우", "⛈️"], 99: ["뇌우", "⛈️"]
   };
 
+
+  // "맑음 · 추움" 대신 "맑지만 추움", "흐리고 쌀쌀함"처럼 자연스럽게
+  var SKY_STEM = { 0: "맑", 1: "대체로 맑", 2: "구름 조금 끼", 3: "흐리", 45: "안개 끼", 48: "안개 끼",
+    51: "가랑비 오", 53: "가랑비 오", 55: "가랑비 오", 61: "비 오", 63: "비 오", 65: "비 많이 오",
+    71: "눈 오", 73: "눈 오", 75: "눈 많이 오", 80: "소나기 오", 81: "소나기 오", 82: "소나기 세게 오",
+    95: "천둥 번개 치", 96: "천둥 번개 치", 99: "천둥 번개 치" };
+  function skyPhrase(code, label, feel) {
+    var stem = SKY_STEM[code];
+    if (!feel || !stem) return label;
+    return stem + (code <= 2 ? "지만 " : "고 ") + feel;
+  }
+
   // ---- 인사말: 월급날·요일·시간·날씨에 따라 바뀜 (새로 열 때 + 20분마다) ----
   var greetName = "", greetWeather = null, greetTimer = null;
   var GREET = {
@@ -178,7 +190,7 @@
         // 하늘 상태 + 체감 기준 한 마디 (맑아도 추우면 춥다고)
         var feel = typeof feels === "number" ? (feels <= -5 ? "매우 추움" : feels <= 3 ? "추움" : feels <= 10 ? "쌀쌀함" : feels >= 33 ? "매우 더움" : feels >= 28 ? "더움" : "") : "";
         var windy = typeof wind === "number" && wind >= 7 ? "바람 강함" : "";
-        $("#fbw-weather-desc").textContent = [info[0], feel, windy].filter(Boolean).join(" · ");
+        $("#fbw-weather-desc").textContent = [skyPhrase(cur.weather_code, info[0], feel), windy].filter(Boolean).join(" · ");
         $("#fbw-weather-emoji").textContent = info[1];
         var more = [];
         if (typeof feels === "number") more.push("체감 <b>" + Math.round(feels) + "°</b>");
