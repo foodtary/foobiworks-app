@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>푸비웍스 공지 보내기</title>
+<link rel="icon" href="icon.png">
+<style>
+  :root {
+    --bg:#f5f5f4; --card:#fff; --ink:#1c1c1c; --sub:#6b6b6b; --line:#e4e4e2; --soft:#efefed;
+    --accent:#1c1c1c; --accent-ink:#fff; --ok:#1f7a4d; --err:#b42318; --chip:#f1f1ef;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Pretendard",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased; padding:32px 16px 64px; }
+  main { max-width:640px; margin:0 auto; }
+  .top { display:flex; align-items:center; gap:12px; margin-bottom:22px; }
+  .top img { width:40px; height:40px; border-radius:10px; }
+  .top h1 { font-size:20px; margin:0; letter-spacing:-0.02em; flex:1; }
+  .who { font-size:13px; color:var(--sub); text-align:right; line-height:1.4; }
+  .who a { color:var(--sub); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; margin-bottom:14px; }
+  .card h2 { font-size:15px; margin:0 0 14px; }
+  label { display:block; font-size:13px; font-weight:600; margin:0 0 6px; }
+  .field { margin-bottom:16px; }
+  .field:last-child { margin-bottom:0; }
+  input[type=text], input[type=url], input[type=password], textarea {
+    width:100%; font:inherit; font-size:15px; color:var(--ink); background:var(--card);
+    border:1px solid var(--line); border-radius:10px; padding:11px 12px; outline:none; }
+  input:focus, textarea:focus { border-color:var(--ink); }
+  textarea { min-height:110px; resize:vertical; line-height:1.55; }
+  .count { font-size:12px; color:var(--sub); text-align:right; margin-top:4px; }
+  .hint { font-size:12px; color:var(--sub); margin-top:6px; line-height:1.5; }
+
+  .chips { display:flex; flex-wrap:wrap; gap:6px; }
+  .chip { border:1px solid var(--line); background:var(--chip); color:var(--ink); border-radius:99px;
+    padding:7px 13px; font:inherit; font-size:14px; cursor:pointer; }
+  .chip[aria-pressed=true] { background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
+  .chip:disabled { opacity:.35; cursor:default; }
+  .group { margin-top:14px; }
+  .group-title { font-size:12px; color:var(--sub); margin:0 0 8px; }
+  details summary { cursor:pointer; font-size:14px; color:var(--sub); margin-top:14px; }
+  .summary { margin-top:14px; font-size:14px; padding:10px 12px; background:var(--soft); border-radius:10px; }
+
+  .preview { display:flex; gap:12px; background:var(--soft); border-radius:12px; padding:14px; }
+  .preview img { width:36px; height:36px; border-radius:8px; flex:none; }
+  .preview b { display:block; font-size:14px; margin-bottom:2px; }
+  .preview span { font-size:13px; color:var(--sub); white-space:pre-wrap; word-break:break-all; }
+
+  .btn { display:block; width:100%; border:0; border-radius:12px; padding:15px; font:inherit; font-size:16px;
+    font-weight:600; background:var(--accent); color:var(--accent-ink); cursor:pointer; }
+  .btn:disabled { opacity:.4; cursor:default; }
+  .btn.ghost { background:transparent; color:var(--ink); border:1px solid var(--line); }
+  .msg { font-size:14px; margin-top:10px; min-height:20px; }
+  .msg.ok { color:var(--ok); } .msg.err { color:var(--err); }
+
+  .hist { list-style:none; margin:0; padding:0; }
+  .hist li { padding:10px 0; border-top:1px solid var(--line); font-size:14px; display:flex; gap:10px; }
+  .hist li:first-child { border-top:0; }
+  .hist .t { flex:1; min-width:0; }
+  .hist .t b { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .hist .t span, .hist .d { font-size:12px; color:var(--sub); }
+  .hist .d { white-space:nowrap; text-align:right; }
+
+  .modal { position:fixed; inset:0; background:rgba(0,0,0,.4); display:flex; align-items:center; justify-content:center; padding:16px; }
+  .modal[hidden] { display:none; }
+  .modal .box { background:var(--card); border-radius:16px; padding:24px; max-width:380px; width:100%; }
+  .modal h3 { margin:0 0 8px; font-size:17px; }
+  .modal p { margin:0 0 18px; font-size:14px; color:var(--sub); line-height:1.6; white-space:pre-line; }
+  .row { display:flex; gap:8px; }
+  .row .btn { padding:12px; font-size:15px; }
+  .center { text-align:center; color:var(--sub); font-size:14px; padding:40px 0; }
+
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#141414; --card:#1e1e1e; --ink:#f2f2f2; --sub:#a0a0a0; --line:#2e2e2e; --soft:#262626;
+      --accent:#f2f2f2; --accent-ink:#141414; --chip:#262626; --ok:#5fd29a; --err:#ff8a80; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <img src="icon.png" alt="">
+    <h1>공지 보내기</h1>
+    <div class="who" id="who"></div>
+  </div>
+
+  <div id="view-loading" class="center">불러오는 중…</div>
+
+  <!-- 로그인 (브라우저에서 처음 열었을 때) -->
+  <section id="view-login" class="card" hidden>
+    <h2>푸비웍스 이름과 코드로 로그인</h2>
+    <div class="field"><label for="ln">이름</label><input type="text" id="ln" placeholder="홍길동" autocomplete="username"></div>
+    <div class="field"><label for="lc">코드</label><input type="password" id="lc" placeholder="회사에서 안내받은 코드" autocomplete="current-password"></div>
+    <button class="btn" id="login-btn">로그인</button>
+    <div class="msg" id="login-msg"></div>
+  </section>
+
+  <section id="view-denied" class="card" hidden>
+    <h2>관리자만 공지를 보낼 수 있어요</h2>
+    <p class="hint">공지 보내기 권한이 필요하면 송다영 사무장에게 요청해 주세요.</p>
+  </section>
+
+  <!-- 작성 -->
+  <div id="view-form" hidden>
+    <section class="card">
+      <h2>받는 사람</h2>
+      <div class="chips"><button class="chip" id="all" aria-pressed="false">전체 직원</button></div>
+      <div class="group"><p class="group-title">팀</p><div class="chips" id="teams"></div></div>
+      <details id="people-wrap"><summary>개인 선택</summary><div id="people"></div></details>
+      <div class="summary" id="summary">받는 사람을 골라 주세요</div>
+    </section>
+
+    <section class="card">
+      <div class="field">
+        <label for="title">제목</label>
+        <input type="text" id="title" maxlength="60" placeholder="예) 11월 3주차 공지">
+        <div class="count"><span id="tc">0</span>/60</div>
+      </div>
+      <div class="field">
+        <label for="body">내용</label>
+        <textarea id="body" maxlength="500" placeholder="바탕화면 알림에는 앞부분만 보여요. 자세한 내용은 링크로 연결해 주세요."></textarea>
+        <div class="count"><span id="bc">0</span>/500</div>
+      </div>
+      <div class="field">
+        <label for="link">링크 <span style="font-weight:400;color:var(--sub)">(선택)</span></label>
+        <input type="url" id="link" placeholder="https://flow.team/...">
+        <div class="hint">알림을 누르면 열리는 주소예요. 푸비웍스 주소는 앱 안에서, 그 외는 인터넷 창에서 열려요.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>미리보기</h2>
+      <div class="preview"><img src="icon.png" alt=""><div><b id="pv-t">제목</b><span id="pv-b">내용</span></div></div>
+    </section>
+
+    <button class="btn" id="send-btn" disabled>보내기</button>
+    <div class="msg" id="send-msg"></div>
+
+    <section class="card" style="margin-top:20px">
+      <h2>최근 보낸 공지</h2>
+      <ul class="hist" id="hist"><li class="t"><span>불러오는 중…</span></li></ul>
+    </section>
+  </div>
+</main>
+
+<div class="modal" id="confirm" hidden>
+  <div class="box">
+    <h3 id="cf-title">이대로 보낼까요?</h3>
+    <p id="cf-text"></p>
+    <div class="row"><button class="btn ghost" id="cf-no">취소</button><button class="btn" id="cf-yes">보내기</button></div>
+  </div>
+</div>
+
+<script>
+var API = 'https://script.google.com/macros/s/AKfycbyTDq9xMIO4hiLuunzaZBD_955XhZvQDDW0dM-egEjCYQ79pxRaLCIpNWx_o0h2yQz4pQ/exec';
+var KEY = 'fbw_send_token';
+var token = null, me = null, staff = [], teams = [];
+var sel = { all: false, teams: new Set(), people: new Set() };
+
+function $(id) { return document.getElementById(id); }
+function view(name) {
+  ['loading','login','denied','form'].forEach(function (v) { $('view-' + v).hidden = (v !== name); });
+}
+function store(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} }
+function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+function api(body) {
+  return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); });
+}
+
+var ERR = {
+  invalid: '이름 또는 코드가 일치하지 않아요.', locked: '여러 번 틀려서 10분간 막혔어요. 잠시 후 다시 시도해 주세요.',
+  not_enabled: '알림 사용 대상이 아니에요. 사무장에게 문의해 주세요.', missing: '이름과 코드를 모두 입력해 주세요.',
+  no_title: '제목을 입력해 주세요.', no_target: '받는 사람을 골라 주세요.', bad_link: '링크는 https:// 로 시작해야 해요.',
+  too_long: '글자 수가 너무 많아요.', bad_target: '받는 사람 목록이 바뀌었어요. 새로고침 후 다시 골라 주세요.',
+  not_admin: '관리자만 보낼 수 있어요.', invalid_token: '로그인이 만료됐어요. 다시 로그인해 주세요.'
+};
+
+function start() {
+  // 앱에서 열면 주소 뒤 #t=열쇠 로 전달됨 (서버로 전송되지 않는 부분)
+  var m = location.hash.match(/t=([a-f0-9]+)/);
+  if (m) { store(KEY, m[1]); history.replaceState(null, '', location.pathname); }
+  token = load(KEY);
+  if (!token) return view('login');
+  api({ action: 'me', token: token }).then(function (r) {
+    if (!r.ok) { store(KEY, null); token = null; return view('login'); }
+    me = r;
+    $('who').innerHTML = escapeHtml(r.name) + '님<br><a href="#" id="logout">로그아웃</a>';
+    $('logout').onclick = function (e) { e.preventDefault(); store(KEY, null); location.reload(); };
+    if (!r.isAdmin) return view('denied');
+    view('form');
+    loadRecipients(); loadHistory();
+  }).catch(function () { $('view-loading').textContent = '연결에 실패했어요. 인터넷을 확인하고 새로고침해 주세요.'; });
+}
+
+$('login-btn').onclick = function () {
+  var n = $('ln').value.trim(), c = $('lc').value.trim();
+  $('login-msg').className = 'msg'; $('login-msg').textContent = '확인 중…';
+  api({ action: 'register', name: n, code: c }).then(function (r) {
+    if (!r.ok) { $('login-msg').className = 'msg err'; $('login-msg').textContent = ERR[r.error] || '로그인에 실패했어요.'; return; }
+    store(KEY, r.token); $('lc').value = ''; view('loading'); start();
+  }).catch(function () { $('login-msg').className = 'msg err'; $('login-msg').textContent = '연결에 실패했어요.'; });
+};
+$('lc').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('login-btn').click(); });
+
+function chip(label, pressed, onclick) {
+  var b = document.createElement('button');
+  b.className = 'chip'; b.type = 'button'; b.textContent = label;
+  b.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+  b.onclick = onclick; return b;
+}
+
+function loadRecipients() {
+  api({ action: 'recipients', token: token }).then(function (r) {
+    if (!r.ok) return;
+    staff = r.staff; teams = r.teams; render();
+  });
+}
+
+function render() {
+  $('all').setAttribute('aria-pressed', sel.all ? 'true' : 'false');
+  var t = $('teams'); t.innerHTML = '';
+  teams.forEach(function (name) {
+    var b = chip(name, sel.teams.has(name), function () { toggle(sel.teams, name); });
+    b.disabled = sel.all; t.appendChild(b);
+  });
+  var p = $('people'); p.innerHTML = '';
+  teams.concat(['']).forEach(function (team) {
+    var members = staff.filter(function (s) { return (s.team || '') === team; });
+    if (!members.length) return;
+    var g = document.createElement('div'); g.className = 'group';
+    g.innerHTML = '<p class="group-title">' + escapeHtml(team || '팀 미지정') + '</p>';
+    var c = document.createElement('div'); c.className = 'chips';
+    members.forEach(function (s) {
+      var b = chip(s.name, sel.people.has(s.name), function () { toggle(sel.people, s.name); });
+      b.disabled = sel.all || (s.team && sel.teams.has(s.team));
+      c.appendChild(b);
+    });
+    g.appendChild(c); p.appendChild(g);
+  });
+  var n = recipients().length;
+  var parts = [];
+  if (sel.all) parts.push('전체 직원');
+  sel.teams.forEach(function (x) { parts.push(x + '팀'); });
+  sel.people.forEach(function (x) { parts.push(x); });
+  $('summary').textContent = n ? (parts.join(', ') + ' — 총 ' + n + '명') : '받는 사람을 골라 주세요';
+  validate();
+}
+$('all').onclick = function () { sel.all = !sel.all; if (sel.all) { sel.teams.clear(); sel.people.clear(); } render(); };
+function toggle(set, v) { set.has(v) ? set.delete(v) : set.add(v); render(); }
+
+function recipients() {
+  if (sel.all) return staff.map(function (s) { return s.name; });
+  var out = new Set();
+  staff.forEach(function (s) { if ((s.team && sel.teams.has(s.team)) || sel.people.has(s.name)) out.add(s.name); });
+  return Array.from(out);
+}
+function targets() {
+  if (sel.all) return ['전체'];
+  var t = [];
+  sel.teams.forEach(function (x) { t.push('#' + x); });
+  sel.people.forEach(function (x) {
+    var s = staff.find(function (y) { return y.name === x; });
+    if (!(s && s.team && sel.teams.has(s.team))) t.push(x);
+  });
+  return t;
+}
+
+['title','body','link'].forEach(function (id) { $(id).addEventListener('input', validate); });
+function validate() {
+  var t = $('title').value, b = $('body').value, l = $('link').value.trim();
+  $('tc').textContent = t.length; $('bc').textContent = b.length;
+  $('pv-t').textContent = t.trim() || '제목';
+  $('pv-b').textContent = (b.trim() || '내용') + (me ? '\n— ' + me.name : '');
+  var linkOk = !l || /^https?:\/\//i.test(l);
+  $('send-btn').disabled = !(t.trim() && recipients().length && linkOk);
+  $('send-msg').className = 'msg ' + (linkOk ? '' : 'err');
+  $('send-msg').textContent = linkOk ? '' : ERR.bad_link;
+}
+
+$('send-btn').onclick = function () {
+  $('cf-text').textContent = '"' + $('title').value.trim() + '"\n' + $('summary').textContent + '에게 1분 안에 바탕화면 알림이 가요.';
+  $('confirm').hidden = false;
+};
+$('cf-no').onclick = function () { $('confirm').hidden = true; };
+$('cf-yes').onclick = function () {
+  $('confirm').hidden = true;
+  $('send-btn').disabled = true;
+  $('send-msg').className = 'msg'; $('send-msg').textContent = '보내는 중…';
+  api({ action: 'send', token: token, title: $('title').value.trim(), body: $('body').value.trim(),
+        link: $('link').value.trim(), targets: targets() })
+    .then(function (r) {
+      if (!r.ok) { $('send-msg').className = 'msg err'; $('send-msg').textContent = ERR[r.error] || '보내지 못했어요.'; validate(); return; }
+      $('send-msg').className = 'msg ok'; $('send-msg').textContent = '보냈어요! 1분 안에 바탕화면 알림으로 전달돼요.';
+      $('title').value = ''; $('body').value = ''; $('link').value = '';
+      sel = { all: false, teams: new Set(), people: new Set() }; render(); loadHistory();
+    })
+    .catch(function () { $('send-msg').className = 'msg err'; $('send-msg').textContent = '연결에 실패했어요. 다시 시도해 주세요.'; validate(); });
+};
+
+function loadHistory() {
+  api({ action: 'history', token: token }).then(function (r) {
+    var ul = $('hist'); ul.innerHTML = '';
+    if (!r.ok || !r.items.length) { ul.innerHTML = '<li><span class="t"><span>아직 보낸 공지가 없어요.</span></span></li>'; return; }
+    r.items.forEach(function (it) {
+      var li = document.createElement('li');
+      var d = new Date(it.date);
+      li.innerHTML = '<div class="t"><b></b><span></span></div><div class="d"></div>';
+      li.querySelector('b').textContent = (it.posted ? '' : '[게시 안 함] ') + it.title;
+      li.querySelector('.t span').textContent = (it.target || '전체') + (it.sender ? ' · ' + it.sender : '');
+      li.querySelector('.d').textContent = (d.getMonth() + 1) + '/' + d.getDate() + ' ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+      ul.appendChild(li);
+    });
+  });
+}
+
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+
+start();
+</script>
+</body>
+</html>
