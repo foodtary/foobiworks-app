@@ -300,8 +300,10 @@
       });
       var single = order.length === 1 && order[0] === "기타";   // 묶음을 안 쓰면 그냥 한 덩어리로
       body.innerHTML = single ? '<div class="fbw-sheets">' + links.map(linkTile).join("") + '</div>' :
-        order.map(function (g) {
-          return '<div class="fbw-agroup' + (fold[g] ? ' fbw-folded' : '') + '" data-group="' + escapeHtml(g) + '">' +
+        order.map(function (g, i) {
+          // 저장된 상태가 없으면: 링크가 많을 때(12개 초과) 첫 묶음만 펼침
+          var folded = (g in fold) ? fold[g] : (links.length > 12 && i > 0);
+          return '<div class="fbw-agroup' + (folded ? ' fbw-folded' : '') + '" data-group="' + escapeHtml(g) + '">' +
             '<button type="button" class="fbw-agroup-head">' + CHEV + escapeHtml(g) + ' <span class="fbw-agroup-count">' + groups[g].length + '</span></button>' +
             '<div class="fbw-sheets">' + groups[g].map(linkTile).join("") + '</div></div>';
         }).join("");
