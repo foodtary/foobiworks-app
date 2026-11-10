@@ -8,7 +8,7 @@
 (function () {
   var SUPABASE_URL = "https://tndxfwomaqydyhspwqth.supabase.co";
   var SUPABASE_ANON_KEY = "sb_publishable_tisxa5suhn_JK35h9n7-eQ_-amSnaDm";
-  var FLOW_CALENDAR_URL = "https://flow.team/main.act";   // 플로우 캘린더 화면 주소 (확인되면 바꾸기)
+  var FLOW_CALENDAR_URL = "https://flow.team/calendar.act";   // 플로우 캘린더 화면
   var STORAGE_KEY = "ess_saved_login"; // 마이페이지·데스크톱 앱과 같은 키 → 자동 연동 (바꾸지 마세요)
 
   // 날씨 위치 (평택)
