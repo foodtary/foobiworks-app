@@ -137,11 +137,32 @@
     greetTimer = setInterval(renderGreeting, 20 * 60 * 1000);
   }
 
+  // 접속한 사람의 대략적인 지역 (인터넷 주소 기준, 권한 요청 없음). 3시간 저장, 실패하면 평택
+  var GEO_KEY = "fbw_geo";
+  function getPlace() {
+    try {
+      var c = JSON.parse(localStorage.getItem(GEO_KEY) || "null");
+      if (c && Date.now() - c.at < 3 * 60 * 60 * 1000) return Promise.resolve(c);
+    } catch (e) {}
+    return fetch("https://api.bigdatacloud.net/data/reverse-geocode-client?localityLanguage=ko")
+      .then(function (r) { return r.json(); })
+      .then(function (g) {
+        if (typeof g.latitude !== "number" || typeof g.longitude !== "number") throw new Error("no geo");
+        var label = String(g.city || g.locality || g.principalSubdivision || "").replace(/^대한민국\s*/, "") || WEATHER_LABEL;
+        var place = { lat: g.latitude, lon: g.longitude, label: label, at: Date.now() };
+        try { localStorage.setItem(GEO_KEY, JSON.stringify(place)); } catch (e) {}
+        return place;
+      })
+      .catch(function () { return { lat: WEATHER_LAT, lon: WEATHER_LON, label: WEATHER_LABEL }; });
+  }
+
   function loadWeather() {
-    $("#fbw-weather-loc").textContent = WEATHER_LABEL;
-    var url = "https://api.open-meteo.com/v1/forecast?latitude=" + WEATHER_LAT +
-      "&longitude=" + WEATHER_LON + "&current=temperature_2m,weather_code&timezone=Asia%2FSeoul";
-    fetch(url)
+    $("#fbw-weather-loc").textContent = "";
+    getPlace().then(function (place) {
+    $("#fbw-weather-loc").textContent = place.label;
+    var url = "https://api.open-meteo.com/v1/forecast?latitude=" + place.lat.toFixed(3) +
+      "&longitude=" + place.lon.toFixed(3) + "&current=temperature_2m,weather_code&timezone=Asia%2FSeoul";
+    return fetch(url)
       .then(function (res) { return res.json(); })
       .then(function (data) {
         var cur = data.current;
@@ -154,7 +175,7 @@
         greetWeather = { code: cur.weather_code, temp: cur.temperature_2m };
         if (first && (cur.weather_code >= 51 || cur.temperature_2m >= 30 || cur.temperature_2m <= 0)) renderGreeting();   // 비·눈·폭염·한파면 바로 반영
       })
-      .catch(function () { $("#fbw-weather-desc").textContent = "—"; });
+    }).catch(function () { $("#fbw-weather-desc").textContent = "—"; });
   }
 
   // 데스크톱 앱이 아닌 브라우저에서만 앱 안내 보이기
