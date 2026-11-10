@@ -478,8 +478,8 @@
     if (sameDay(d, t)) return "내일";
     return (d.getMonth() + 1) + "/" + d.getDate() + " (" + DAYS[d.getDay()] + ")";
   }
-  // 읽은 공지 기억 (이 컴퓨터·이 사람 기준). 처음 쓰는 사람은 7일 지난 공지를 읽은 것으로 시작
-  function readKey() { return "fbw_read_notices:" + (greetName || ""); }
+  // 읽은 공지 기억 (이 컴퓨터·이 사람 기준). 공지를 눌러서 열어 본 것만 읽음
+  function readKey() { return "fbw_read_notices2:" + (greetName || ""); }
   function loadRead() { try { return JSON.parse(localStorage.getItem(readKey()) || "null"); } catch (e) { return null; } }
   function saveRead(ids) { try { localStorage.setItem(readKey(), JSON.stringify(ids.slice(-200))); } catch (e) {} }
   function renderNotices(list, failed) {
@@ -487,11 +487,7 @@
     if (failed) { box.innerHTML = '<div class="fbw-quiet">공지를 불러올 수 없어요</div>'; return; }
     if (!list.length) { box.innerHTML = '<div class="fbw-quiet">새 공지 없음</div>'; return; }
     var now = Date.now(), WEEK = 7 * 24 * 3600 * 1000;
-    var read = loadRead();
-    if (!read) {
-      read = list.filter(function (n) { return !n.date || now - new Date(n.date).getTime() >= WEEK; }).map(function (n) { return n.id; });
-      saveRead(read);
-    }
+    var read = loadRead() || [];   // 직접 눌러 본 공지만 읽음 (처음엔 목록 전부 안 읽음)
     box.innerHTML = list.map(function (n) {
       var fresh = n.date && (now - new Date(n.date).getTime()) < WEEK;   // 7일 이내 공지
       var unread = n.id && read.indexOf(n.id) === -1;
