@@ -138,14 +138,23 @@
     pools.push(GREET.base);
     return pick(pick(pools));
   }
+  // 임원은 재미 문구 없이 기본 인사만 (임원 여부는 이 컴퓨터에 기억해 두고 처음부터 적용)
+  var greetPlain = false;
+  function plainKey() { return "fbw_plain_greet:" + greetName; }
+  function setGreetPlain(on) {
+    greetPlain = !!on;
+    try { if (on) localStorage.setItem(plainKey(), "1"); else localStorage.removeItem(plainKey()); } catch (e) {}
+    renderGreeting();
+  }
   function renderGreeting() {
     if (!greetName) return;
-    $("#fbw-greeting").textContent = greetName + "님, " + greetLine();
+    $("#fbw-greeting").textContent = greetName + "님, " + (greetPlain ? "안녕하세요" : greetLine());
   }
   // 동명이인 구분용으로 붙인 숫자(이은비2)는 화면에 보이지 않게
   function displayName(n) { return String(n || "").replace(/\d+$/, ""); }
   function startGreeting(name) {
     greetName = displayName(name);
+    try { greetPlain = localStorage.getItem(plainKey()) === "1"; } catch (e) { greetPlain = false; }
     renderGreeting();
     if (greetTimer) clearInterval(greetTimer);
     greetTimer = setInterval(renderGreeting, 20 * 60 * 1000);
@@ -825,6 +834,7 @@
       .then(function (r) {
         renderAdmin(r.admin);
         $("#fbw-exec-btn").hidden = !r.exec;
+        if (r.ok) setGreetPlain(!!r.exec);
         if (r.team) initTeamTools(r.team);
         if (!r.ok) { renderNotices([], true); renderEvents([], true); return; }
         renderNotices(r.notices || [], !!r.noticeError);
