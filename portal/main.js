@@ -91,37 +91,46 @@
   // ---- 인사말: 월급날·요일·시간·날씨에 따라 바뀜 (새로 열 때 + 20분마다) ----
   var greetName = "", greetWeather = null, greetTimer = null;
   var GREET = {
-    payday: ["오늘은 월급날이에요 💸 통장 확인하셨죠?", "월급 들어오는 날! 오늘은 럭키비키 💰", "통장이 잠깐 따뜻해지는 날이에요 🔥", "오늘은 10일, 한 달 수고가 입금되는 날 🎉"],
-    paydayEve: ["내일이 월급날이에요. 오늘 하루만 버텨요 💪", "월급 D-1, 오늘도 가보자고 🚀"],
-    paydayAfter: ["월급은 통장을 스쳐 갔지만 우리는 남았어요 🫠", "월급 다음 날, 장바구니는 참아봐요 🛒"],
-    monthEnd: ["월말 마감 화이팅! 거의 다 왔어요 📊", "이번 달도 끝이 보여요. 조금만 더 🏁"],
-    mon: ["월요일도 오히려 좋아 😎", "월요병엔 커피 한 잔 처방할게요 ☕", "새로운 한 주, 가보자고 🚀"],
-    wed: ["수요일이에요. 이번 주 반 왔다! 🐫", "주중의 한가운데, 중꺾마 💪"],
-    fri: ["드디어 금요일이에요 🎉", "금요일엔 뭐든 할 수 있어요 ✨", "이번 주도 고생 많았어요 🙌"],
-    weekend: ["주말에도 오셨네요, 갓생 인정 👏", "쉬는 날엔 쉬어도 돼요 🛋️"],
-    morning: ["좋은 아침이에요 ☀️ 오늘도 알잘딱깔센!", "출근 도장 쾅! 오늘도 가보자고 🚀", "모닝 커피 챙기셨어요? ☕"],
-    lunch: ["점심 메뉴 정하셨어요? 🍚", "밥심이 곧 업무력, 맛점하세요 🍜"],
-    afternoon: ["오후엔 당 충전 필수 🍫", "졸음은 스트레칭으로 이겨봐요 🙆", "오후도 중꺾마 💪"],
-    evening: ["아직 계셨어요? 얼른 퇴근해요 🏃", "오늘 하루도 수고 많았어요 🌙", "칼퇴는 국룰이에요 🌙"],
-    rain: ["비 와요 ☔ 우산 챙기셨죠?", "비 오는 날엔 파전… 아니 업무죠 🌧️"],
-    snow: ["눈 와요 ☃️ 퇴근길 미끄럼 조심!", "창밖에 눈이 와요, 감성 충전 ❄️"],
-    hot: ["밖은 찜통이에요 🥵 시원한 거 챙겨요", "더위 먹지 말고 물 많이 마셔요 🧊"],
-    cold: ["바깥은 냉동실이에요 🥶 따뜻하게 입어요", "손 시려운 날, 따뜻한 차 한 잔 🍵"],
-    nice: ["날씨 미쳤다… 좋은 쪽으로요 🌤️", "산책하기 딱 좋은 날씨예요 🌿"],
-    base: ["오늘도 반가워요 👋", "등장! 오늘도 잘 부탁해요 🙌", "오늘도 무리하지 말고 화이팅 ✨"]
+    payday: ["오늘은 월급날이에요 💸 통장 확인하셨죠?", "월급 들어오는 날! 오늘은 럭키비키 💰", "통장이 잠깐 따뜻해지는 날이에요 🔥", "오늘은 10일, 한 달 수고가 입금되는 날 🎉",
+      "월급님 어서 오세요, 기다렸어요 🙇", "오늘만큼은 장바구니 결제 허락할게요 🛍️", "한 달 버틴 나, 오늘은 칭찬해 👏", "통장 알림 소리가 제일 반가운 날 🔔"],
+    paydayEve: ["내일이 월급날이에요. 오늘 하루만 버텨요 💪", "월급 D-1, 오늘도 가보자고 🚀", "월급 전날의 텅장, 조금만 참아요 🫠", "내일이면 통장에 해가 떠요 🌅"],
+    paydayAfter: ["월급은 통장을 스쳐 갔지만 우리는 남았어요 🫠", "월급 다음 날, 장바구니는 참아봐요 🛒", "어제 들어온 월급, 아직 계신가요? 👀", "카드값이 먼저 인사하는 날이에요 💳"],
+    monthEnd: ["월말 마감 화이팅! 거의 다 왔어요 📊", "이번 달도 끝이 보여요. 조금만 더 🏁", "월말엔 커피 한 잔 더 허락할게요 ☕", "한 달 마무리, 오늘도 깔끔하게 ✨", "마감 요정 등장! 오늘도 해냅니다 🧚"],
+    monthStart: ["새로운 한 달 시작이에요, 이번 달도 잘 부탁해요 🌱", "새 달, 새 마음! 가보자고 🚀", "이번 달 목표, 같이 찢어봐요 🔥"],
+    mon: ["월요일도 오히려 좋아 😎", "월요병엔 커피 한 잔 처방할게요 ☕", "새로운 한 주, 가보자고 🚀", "월요일의 나, 생각보다 멋있어요 ✨", "한 주의 시작, 천천히 시동 걸어요 🚗", "월요일은 원래 느려요. 괜찮아요 🐢"],
+    tue: ["화요일엔 화이팅이 두 배예요 🔥", "어제보다 조금 더 가벼운 화요일 🎈", "화요일, 리듬 타기 딱 좋은 날 🎶"],
+    wed: ["수요일이에요. 이번 주 반 왔다! 🐫", "주중의 한가운데, 중꺾마 💪", "수요일엔 수고했다고 말해주기 🫶", "반 왔어요, 남은 반도 같이 가요 🛤️"],
+    thu: ["목요일, 주말이 보이기 시작해요 👀", "하루만 더 힘내면 금요일 🌈", "목요일엔 목 스트레칭 한 번 🙆"],
+    fri: ["드디어 금요일이에요 🎉", "금요일엔 뭐든 할 수 있어요 ✨", "이번 주도 고생 많았어요 🙌", "불금 모드 충전 중… 🔋", "금요일의 미소는 숨길 수 없어요 😊", "주말까지 얼마 안 남았어요 🏖️"],
+    weekend: ["주말에도 오셨네요, 갓생 인정 👏", "쉬는 날엔 쉬어도 돼요 🛋️", "주말 출근, 오늘은 짧고 굵게 ⚡", "주말엔 마음 편히, 급한 것만 쏙 🍀"],
+    morning: ["좋은 아침이에요 ☀️ 오늘도 알잘딱깔센!", "출근 도장 쾅! 오늘도 가보자고 🚀", "모닝 커피 챙기셨어요? ☕", "오늘 하루도 반짝반짝하게 ✨", "아침 공기 한 번 크게 마시고 시작해요 🌿", "오늘의 첫 할 일: 물 한 잔 마시기 💧", "아침부터 일 잘하는 사람 여기 있네 😎"],
+    lunch: ["점심 메뉴 정하셨어요? 🍚", "밥심이 곧 업무력, 맛점하세요 🍜", "오늘 점심은 뭐가 땡기세요? 🤔", "점심시간엔 일 생각 금지 🙅", "든든하게 먹고 오후도 달려요 🍱"],
+    afternoon: ["오후엔 당 충전 필수 🍫", "졸음은 스트레칭으로 이겨봐요 🙆", "오후도 중꺾마 💪", "잠깐 창밖 한 번 보고 와요 🌤️", "오후 3시의 커피는 국룰 ☕", "어깨 한 번 쭉 펴볼까요? 🧘", "여기까지 온 것만으로도 대단해요 👏"],
+    evening: ["아직 계셨어요? 얼른 퇴근해요 🏃", "오늘 하루도 수고 많았어요 🌙", "칼퇴는 국룰이에요 🌙", "오늘 할 만큼 했어요, 이제 쉬어요 🛌", "집에 가는 길, 좋아하는 노래 한 곡 🎧", "내일의 나에게 맡기고 퇴근 ✋"],
+    rain: ["비 와요 ☔ 우산 챙기셨죠?", "비 오는 날엔 파전… 아니 업무죠 🌧️", "빗소리 들으면서 차분하게 시작해요 🎧", "퇴근길 우산 꼭 챙겨요 ☂️"],
+    snow: ["눈 와요 ☃️ 퇴근길 미끄럼 조심!", "창밖에 눈이 와요, 감성 충전 ❄️", "눈 오는 날엔 따뜻한 음료 한 잔 ☕"],
+    hot: ["밖은 찜통이에요 🥵 시원한 거 챙겨요", "더위 먹지 말고 물 많이 마셔요 🧊", "에어컨 바람 아래 오늘도 화이팅 🌬️"],
+    cold: ["바깥은 냉동실이에요 🥶 따뜻하게 입어요", "손 시려운 날, 따뜻한 차 한 잔 🍵", "핫팩 하나 챙기셨어요? 🔥", "오늘은 목도리가 필수템이에요 🧣"],
+    nice: ["날씨 미쳤다… 좋은 쪽으로요 🌤️", "산책하기 딱 좋은 날씨예요 🌿", "이런 날은 점심 먹고 한 바퀴 🚶", "하늘 한 번 올려다보고 가요 ☁️"],
+    base: ["오늘도 반가워요 👋", "등장! 오늘도 잘 부탁해요 🙌", "오늘도 무리하지 말고 화이팅 ✨", "오늘도 럭키비키한 하루 되세요 🍀", "당신이 있어서 팀이 든든해요 💪", "오늘의 운세: 일이 술술 풀림 🔮",
+      "작은 성취도 성취예요, 잘하고 있어요 🌱", "숨 한 번 고르고, 천천히 가요 🫧", "오늘도 알잘딱깔센 부탁드려요 🙏", "지금 이 순간도 충분히 잘하고 있어요 🌈", "오늘 하루, 웃을 일 하나는 꼭 생기길 😊"]
   };
   function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
   function greetLine() {
     var now = new Date(), d = now.getDate(), dow = now.getDay(), h = now.getHours() + now.getMinutes() / 60;
     var lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-    if (d === 10) return pick(GREET.payday);                  // 월급날은 무조건
+    var money = !greetNoMoney;
+    if (money && d === 10) return pick(GREET.payday);         // 월급날은 무조건 (임원 제외)
     var pools = [];
-    if (d === 9) pools.push(GREET.paydayEve, GREET.paydayEve);
-    if (d === 11) pools.push(GREET.paydayAfter);
+    if (money && d === 9) pools.push(GREET.paydayEve, GREET.paydayEve);
+    if (money && d === 11) pools.push(GREET.paydayAfter);
     if (d >= lastDay - 2) pools.push(GREET.monthEnd);
+    if (d <= 2) pools.push(GREET.monthStart);
     if (dow === 0 || dow === 6) pools.push(GREET.weekend, GREET.weekend);
     else if (dow === 1) pools.push(GREET.mon);
+    else if (dow === 2) pools.push(GREET.tue);
     else if (dow === 3) pools.push(GREET.wed);
+    else if (dow === 4) pools.push(GREET.thu);
     else if (dow === 5) pools.push(GREET.fri, GREET.fri);
     if (h < 10.5) pools.push(GREET.morning);
     else if (h >= 11.5 && h < 13.5) pools.push(GREET.lunch);
@@ -138,23 +147,24 @@
     pools.push(GREET.base);
     return pick(pick(pools));
   }
-  // 임원은 재미 문구 없이 기본 인사만 (임원 여부는 이 컴퓨터에 기억해 두고 처음부터 적용)
-  var greetPlain = false;
-  function plainKey() { return "fbw_plain_greet:" + greetName; }
-  function setGreetPlain(on) {
-    greetPlain = !!on;
+  // 임원은 월급날 등 돈 이야기 문구만 빼기 (임원 여부는 이 컴퓨터에 기억해 두고 처음부터 적용)
+  var greetNoMoney = false;
+  function plainKey() { return "fbw_nomoney_greet:" + greetName; }
+  function setGreetNoMoney(on) {
+    var changed = greetNoMoney !== !!on;
+    greetNoMoney = !!on;
     try { if (on) localStorage.setItem(plainKey(), "1"); else localStorage.removeItem(plainKey()); } catch (e) {}
-    renderGreeting();
+    if (changed) renderGreeting();
   }
   function renderGreeting() {
     if (!greetName) return;
-    $("#fbw-greeting").textContent = greetName + "님, " + (greetPlain ? "안녕하세요" : greetLine());
+    $("#fbw-greeting").textContent = greetName + "님, " + greetLine();
   }
   // 동명이인 구분용으로 붙인 숫자(이은비2)는 화면에 보이지 않게
   function displayName(n) { return String(n || "").replace(/\d+$/, ""); }
   function startGreeting(name) {
     greetName = displayName(name);
-    try { greetPlain = localStorage.getItem(plainKey()) === "1"; } catch (e) { greetPlain = false; }
+    try { greetNoMoney = localStorage.getItem(plainKey()) === "1"; } catch (e) { greetNoMoney = false; }
     renderGreeting();
     if (greetTimer) clearInterval(greetTimer);
     greetTimer = setInterval(renderGreeting, 20 * 60 * 1000);
@@ -834,7 +844,7 @@
       .then(function (r) {
         renderAdmin(r.admin);
         $("#fbw-exec-btn").hidden = !r.exec;
-        if (r.ok) setGreetPlain(!!r.exec);
+        if (r.ok) setGreetNoMoney(!!r.exec);
         if (r.team) initTeamTools(r.team);
         if (!r.ok) { renderNotices([], true); renderEvents([], true); return; }
         renderNotices(r.notices || [], !!r.noticeError);
