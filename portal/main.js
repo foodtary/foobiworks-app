@@ -239,10 +239,15 @@
     }).catch(function () { $("#fbw-weather-desc").textContent = "—"; });
   }
 
-  // 데스크톱 앱이 아닌 브라우저에서만 앱 안내 보이기
+  // 앱 받기 안내: PC 브라우저 → 데스크톱 앱, 안드로이드 브라우저 → 안드로이드 앱, 앱 안·아이폰 → 숨김
   function showAppNote() {
-    var inApp = /Electron/i.test(navigator.userAgent || "");
-    $("#fbw-appnote").style.display = inApp ? "none" : "inline-flex";
+    var ua = navigator.userAgent || "", a = $("#fbw-appnote");
+    if (/Electron|FoobiworksAndroid|iPhone|iPad|iPod/i.test(ua)) { a.style.display = "none"; return; }
+    if (/Android/i.test(ua)) {
+      a.setAttribute("href", "https://github.com/foodtary/foobiworks-app/releases/download/android/Foobiworks-Android.apk");
+      a.lastChild.textContent = "안드로이드 앱 받기";
+    }
+    a.style.display = "inline-flex";
   }
 
   function showDashboard(name) {
