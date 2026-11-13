@@ -145,10 +145,11 @@
     else if (dow === 3) pools.push(GREET.wed);
     else if (dow === 4) pools.push(GREET.thu);
     else if (dow === 5) pools.push(GREET.fri, GREET.fri);
-    if (h < 10.5) pools.push(GREET.morning);
+    var late = h >= 18 || h < 5;   // 저녁·밤
+    if (h >= 5 && h < 10.5) pools.push(GREET.morning);
     else if (h >= 11.5 && h < 13.5) pools.push(GREET.lunch);
     else if (h >= 14 && h < 18) pools.push(GREET.afternoon);
-    else if (h >= 18.5) pools.push(GREET.evening, GREET.evening);
+    else if (late) pools.push(GREET.evening, GREET.evening, GREET.evening);
     if (greetWeather) {
       var c = greetWeather.code, t = greetWeather.temp;
       if ((c >= 51 && c <= 67) || (c >= 80 && c <= 82) || c >= 95 || greetWeather.pop >= 60) pools.push(GREET.rain, GREET.rain);
@@ -158,7 +159,18 @@
       else if (c <= 1 && t >= 15 && t <= 25) pools.push(GREET.nice);
     }
     pools.push(GREET.base, GREET.witty, GREET.witty, GREET.ai);   // 위트·AI 문구는 자주
+    // 시간이 들어간 문구는 그 시간대에만 (저녁에 점심·아침 문구가 나오지 않게)
+    pools = pools.map(function (pool) { return pool.filter(function (t) { return fitsTime(t, h); }); })
+      .filter(function (pool) { return pool.length; });
     return pick(pick(pools));
+  }
+  function fitsTime(t, h) {
+    if (/아침|모닝|출근|시작해|시동|첫 할 일|오늘 하루|가보자고|시킬 일 하나/.test(t)) return h >= 5 && h < 12;
+    if (/점심|맛점|밥심/.test(t)) return h >= 10 && h < 13.5;
+    if (/오후|졸음|졸려|졸리면|당 충전|탕비실|퇴근까지/.test(t)) return h >= 12 && h < 18;
+    if (/퇴근해요|퇴근길|칼퇴|퇴근 ✋|이제 쉬어요|수고 많았어요/.test(t)) return h >= 17 || h < 5;
+    if (/부탁|커피|확인했습니다|할 일|알림 0개|무리하지 말고|버그 없이/.test(t)) return h >= 5 && h < 18;
+    return true;
   }
   // 임원은 월급날 등 돈 이야기 문구만 빼기 (임원 여부는 이 컴퓨터에 기억해 두고 처음부터 적용)
   var greetNoMoney = false;
