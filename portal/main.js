@@ -1346,7 +1346,7 @@
       if (msg && !taskData) { box.innerHTML = '<div class="fbw-quiet">' + escapeHtml(msg) + '</div>'; return; }
       box.innerHTML = (show.length ? show.slice(0, 80).map(function (t) {
         var who = kind === "requested" && t.w && t.w.length ? t.w.join(", ") + " · " : "";
-        return '<a class="fbw-task" href="https://flow.team/main.act?projectId=' + encodeURIComponent(t.j) + '&postId=' + encodeURIComponent(t.p) + '" target="_blank" rel="noopener">' +
+        return '<a class="fbw-task" href="' + (/^https:\/\/([a-z0-9-]+\.)?flow\.team\//.test(t.u || "") ? escapeHtml(t.u) : "https://flow.team/main.act?projectId=" + encodeURIComponent(t.j) + "&postId=" + encodeURIComponent(t.p)) + '" target="_blank" rel="noopener">' +
           '<span class="fbw-task-st s' + escapeHtml(t.s) + '">' + escapeHtml(t.sn || TASK_ST[t.s] || "업무") + '</span>' +
           '<span class="fbw-task-main"><span class="fbw-task-name">' + escapeHtml(t.n) + '</span><span class="fbw-task-sub">' + escapeHtml(who + (t.jt || "")) + '</span></span>' +
           '<span class="fbw-task-due' + (taskTab[kind] === "late" ? " late" : "") + '">' + taskDue(t.ed) + '</span></a>';
