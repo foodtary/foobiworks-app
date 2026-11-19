@@ -1068,7 +1068,7 @@
   // ---- 업무 (플로우 대체, 시험판) : 새 서버(서울) ----
   // 로그인은 지금과 같은 이름+코드. 서버 함수가 그 사람이 볼 수 있는 것만 돌려줌. 지금은 관리자에게만 버튼이 보임
   var WORKS_URL = "https://endosgvjrhnzxrvrxgrw.supabase.co", WORKS_KEY = "sb_publishable_ZSo0alJrX1zeYK3RFdlBYg_vEnFs3s-";
-  var wkU = null, wkEl = null, wkStaff = [], wkProjects = [], wkPid = null, wkFeed = null, wkItemId = null, wkMode = "task", wkPicked = [];
+  var wkU = null, wkEl = null, wkStaff = [], wkProjects = [], wkPid = null, wkFeed = null, wkItemId = null, wkMode = "task", wkPicked = [], wkNewOpen = false, wkInvOpen = false;
   function wkCall(fn, args) {
     return fetch(WORKS_URL + "/rest/v1/rpc/" + fn, { method: "POST", headers: { "Content-Type": "application/json", "apikey": WORKS_KEY },
       body: JSON.stringify(Object.assign({ p_name: wkU.name, p_code: wkU.code }, args || {})) })
@@ -1087,10 +1087,11 @@
       '<div class="fbw-wk-body"><div class="fbw-wk-col" id="fbw-wk-left"></div><div class="fbw-wk-col plain" id="fbw-wk-mid"></div><div class="fbw-wk-col" id="fbw-wk-right" hidden></div></div>';
     document.getElementById("fbw-portal-root").appendChild(wkEl);
     wkEl.addEventListener("click", wkClick);
-    wkEl.addEventListener("input", function (ev) { if (ev.target.id === "fbw-wk-psearch") wkRenderProjects(); if (ev.target.id === "fbw-wk-who") wkRenderPick(); });
+    wkEl.addEventListener("input", function (ev) { if (ev.target.id === "fbw-wk-psearch") wkRenderProjects(); if (ev.target.id === "fbw-wk-who") wkRenderPick(); if (ev.target.id === "fbw-wk-invq") wkRenderInvite(); });
     wkEl.addEventListener("focusin", function (ev) { if (ev.target.id === "fbw-wk-who") wkRenderPick(); });
     wkEl.addEventListener("keydown", function (ev) {
       if (ev.key === "Enter" && !ev.shiftKey && ev.target.id === "fbw-wk-cmin") { ev.preventDefault(); wkAddComment(); }
+      if (ev.key === "Enter" && ev.target.id === "fbw-wk-newname") { ev.preventDefault(); wkNewProject(); }
       if (ev.key === "Escape") { if (wkItemId) wkCloseItem(); else wkClose(); }
     });
   }
@@ -1113,6 +1114,7 @@
     var q = ($("#fbw-wk-psearch") || {}).value || "", box = $("#fbw-wk-left");
     var list = wkProjects.filter(function (p) { return !p.hidden && (!q || p.title.toLowerCase().indexOf(q.toLowerCase()) >= 0); });
     box.innerHTML = '<div class="fbw-wk-h"><b>내 프로젝트</b><button type="button" class="fbw-wk-btn" data-wk="newproj">+ 새 프로젝트</button></div>' +
+      (wkNewOpen ? '<div class="fbw-wk-row" style="margin-top:0"><input class="fbw-wk-in" id="fbw-wk-newname" placeholder="새 프로젝트 이름" maxlength="100" style="flex:1;min-width:0" /><button type="button" class="fbw-wk-btn dark" data-wk="newproj-ok">만들기</button></div><div class="fbw-wk-err" id="fbw-wk-newerr"></div>' : '') +
       '<input class="fbw-wk-in" id="fbw-wk-psearch" placeholder="프로젝트 찾기" value="' + escapeHtml(q) + '" style="margin-bottom:8px" />' +
       (list.length ? list.map(function (p) {
         return '<div class="fbw-wk-proj' + (p.id === wkPid ? " on" : "") + '" data-wk="proj" data-id="' + p.id + '">' +
@@ -1121,9 +1123,26 @@
           (p.unread > 0 ? '<span class="fbw-wk-badge">' + p.unread + '</span>' : '') + '</div>';
       }).join("") : '<div class="fbw-wk-quiet">' + (q ? "찾는 프로젝트가 없어요" : "아직 프로젝트가 없어요. 위 버튼으로 만들어 보세요.") + '</div>');
     var inp = $("#fbw-wk-psearch"); if (q && inp) { inp.focus(); inp.setSelectionRange(q.length, q.length); }
+    var nn = $("#fbw-wk-newname"); if (nn) nn.focus();
+  }
+  function wkNewProject() {
+    var inp = $("#fbw-wk-newname"), title = inp ? inp.value.trim() : "", err = $("#fbw-wk-newerr");
+    if (!title) { if (err) err.textContent = "이름을 입력해 주세요"; return; }
+    inp.disabled = true;
+    wkCall("works_project_create", { p_title: title }).then(function (newId) {
+      wkNewOpen = false; wkPid = Number(newId);
+      return wkLoadProjects(true).then(function () { wkSelect(Number(newId)); });
+    }).catch(function (e) { inp.disabled = false; if (err) err.textContent = "만들지 못했어요: " + e.message; });
+  }
+  function wkRenderInvite() {
+    var box = $("#fbw-wk-invlist"); if (!box) return;
+    var q = (($("#fbw-wk-invq") || {}).value || "").trim(), mem = {}; ((wkFeed && wkFeed.members) || []).forEach(function (m) { mem[m.name] = 1; });
+    var list = wkStaff.filter(function (s) { return !mem[s.name] && (!q || s.name.indexOf(q) >= 0 || (s.department || "").indexOf(q) >= 0); });
+    box.innerHTML = list.length ? list.map(function (s) { return '<div data-wk="invpick" data-name="' + escapeHtml(s.name) + '">' + escapeHtml(s.name) + '<small>' + escapeHtml(s.department || "") + '</small></div>'; }).join("")
+      : '<div class="fbw-wk-quiet">' + (wkStaff.length ? "초대할 사람이 없어요" : "직원 목록을 불러오는 중…") + '</div>';
   }
   function wkSelect(id) {
-    wkPid = id; wkItemId = null; wkPicked = []; wkRenderProjects(); wkShowRight(false);
+    wkPid = id; wkItemId = null; wkPicked = []; wkInvOpen = false; wkRenderProjects(); wkShowRight(false);
     $("#fbw-wk-mid").innerHTML = '<div class="fbw-wk-quiet">불러오는 중…</div>';
     wkLoadFeed();
   }
@@ -1143,7 +1162,8 @@
     box.innerHTML =
       '<div class="fbw-wk-card"><div class="fbw-wk-h"><b style="font-size:17px !important">' + escapeHtml(pj.title) + '</b>' +
         '<button type="button" class="fbw-wk-btn" data-wk="invite">참여자 ' + mem.length + '명 · 초대</button></div>' +
-        '<div class="fbw-wk-meta">' + escapeHtml(mem.map(function (m) { return m.name; }).join(", ")) + '</div></div>' +
+        '<div class="fbw-wk-meta">' + escapeHtml(mem.map(function (m) { return m.name; }).join(", ")) + '</div>' +
+        (wkInvOpen ? '<div style="margin-top:10px"><input class="fbw-wk-in" id="fbw-wk-invq" placeholder="이름·부서로 찾아서 누르면 바로 초대돼요" autocomplete="off" /><div class="fbw-wk-menu" id="fbw-wk-invlist" style="position:static;width:100%;box-shadow:none;margin-top:6px"></div><div class="fbw-wk-err" id="fbw-wk-inverr"></div></div>' : '') + '</div>' +
       '<div class="fbw-wk-card" id="fbw-wk-compose">' +
         '<div class="fbw-wk-tabs"><button type="button" data-wk="mode" data-mode="task"' + (wkMode === "task" ? ' class="on"' : '') + '>업무</button><button type="button" data-wk="mode" data-mode="post"' + (wkMode === "post" ? ' class="on"' : '') + '>글</button></div>' +
         '<input class="fbw-wk-in" id="fbw-wk-title" placeholder="제목을 입력하세요" maxlength="200" />' +
@@ -1160,7 +1180,7 @@
             (isTask && it.assignees.length ? ' · 담당 ' + escapeHtml(it.assignees.join(", ")) : '') + (it.due_at ? ' · 마감 ' + wkDate(it.due_at) : '') + (it.comments ? ' · 댓글 ' + it.comments : '') + '</div></div>' +
           (isTask ? wkSt(it.status_cat, it.status_name) : '') + '</div></div>';
       }).join("") : '<div class="fbw-wk-card"><div class="fbw-wk-quiet">아직 글이 없어요. 위에서 첫 업무를 등록해 보세요.</div></div>');
-    wkRenderChips();
+    wkRenderChips(); wkRenderInvite();
   }
   function wkRenderChips() {
     var c = $("#fbw-wk-chips"); if (!c) return;
@@ -1236,15 +1256,14 @@
       p.fav = !p.fav; wkRenderProjects(); wkCall("works_project_favorite", { p_project_id: id, p_on: p.fav }).catch(function () {});
     }
     else if (act === "proj") wkSelect(id);
-    else if (act === "newproj") {
-      var title = window.prompt("새 프로젝트 이름"); if (!title || !title.trim()) return;
-      wkCall("works_project_create", { p_title: title.trim() }).then(function (newId) { wkPid = null; return wkLoadProjects(true).then(function () { wkSelect(Number(newId)); }); })
-        .catch(function (e) { window.alert("만들지 못했어요: " + e.message); });
-    }
-    else if (act === "invite") {
-      var names = window.prompt("초대할 직원 이름 (쉼표로 여러 명)"); if (!names) return;
-      wkCall("works_project_invite", { p_project_id: wkPid, p_names: names.split(",").map(function (x) { return x.trim(); }).filter(Boolean) })
-        .then(function (r) { if (!r.ok) window.alert(r.error === "not_manager" ? "프로젝트 관리자만 초대할 수 있어요" : "초대하지 못했어요"); else { wkLoadFeed(); wkLoadProjects(true); } });
+    else if (act === "newproj") { wkNewOpen = !wkNewOpen; wkRenderProjects(); }
+    else if (act === "newproj-ok") wkNewProject();
+    else if (act === "invite") { wkInvOpen = !wkInvOpen; wkRenderMid(); var iq = $("#fbw-wk-invq"); if (iq) iq.focus(); }
+    else if (act === "invpick") {
+      wkCall("works_project_invite", { p_project_id: wkPid, p_names: [t.getAttribute("data-name")] }).then(function (r) {
+        if (!r.ok) { $("#fbw-wk-inverr").textContent = r.error === "not_manager" ? "프로젝트 관리자만 초대할 수 있어요" : "초대하지 못했어요"; return; }
+        wkLoadFeed(); wkLoadProjects(true);
+      }).catch(function (e) { $("#fbw-wk-inverr").textContent = "초대하지 못했어요: " + e.message; });
     }
     else if (act === "mode") { wkMode = t.getAttribute("data-mode"); wkRenderMid(); }
     else if (act === "pick") { wkPicked.push(t.getAttribute("data-name")); $("#fbw-wk-who").value = ""; wkRenderChips(); wkRenderPick(); }
