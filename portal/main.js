@@ -1165,10 +1165,10 @@
   var W_WIDTHS = [["s", "좁게"], ["m", "보통"], ["l", "넓게"], ["x", "전체"]], W_HEIGHTS = [["s", "낮게"], ["m", "보통"], ["l", "내용 전체"]];
   // 팀별 기본 구성: [위젯, 폭, 높이]. 여기 없는 팀은 "" (지금까지의 화면과 같은 배치)
   var W_TEAM_DEFAULT = {
-    "": [["today", "l", "m"], ["team", "s", "m"], ["mytasks", "l", "m"], ["events", "s", "m"], ["reqtasks", "l", "m"], ["org", "s", "m"], ["admin", "l", "l"], ["notices", "l", "l"]],
+    "": [["mytasks", "l", "m"], ["today", "s", "m"], ["reqtasks", "l", "m"], ["events", "s", "m"], ["notices", "l", "l"], ["team", "s", "m"], ["admin", "l", "l"], ["org", "s", "m"]],
     "컨설팅": [["events", "l", "l"], ["today", "s", "m"], ["mytasks", "l", "m"], ["team", "s", "m"], ["reqtasks", "l", "m"], ["org", "s", "m"], ["notices", "l", "l"], ["admin", "l", "l"]]
   };
-  var wGrid = null, wTray = null, wMap = {}, wLayout = [], wUser = null, wTeam = "", wCustom = false, wEdit = false, wDrag = null, wSwap = null;
+  var wGrid = null, wTray = null, wMap = {}, wLayout = [], wUser = null, wTeam = "", wCustom = false, wEdit = false, wDrag = null, wSwap = null, wBalancing = false, wBalT = null, wBalQ = null;
 
   function wDefault(team) {
     return (W_TEAM_DEFAULT[team] || W_TEAM_DEFAULT[""]).map(function (r) { return { id: r[0], w: r[1], h: r[2], hide: false }; });
@@ -1200,6 +1200,29 @@
     box.style.gridRowEnd = "span " + Math.max(1, Math.ceil((h + 16) / 4));
   }
   function wFitAll() { Object.keys(wMap).forEach(function (id) { wFit(wMap[id].box); }); }
+  // 줄 맞추기: 아래 위젯과의 사이가 벌어진 위젯은 그만큼 늘려서 간격을 똑같이(16px) 맞춤
+  function wBalance() {
+    if (!wGrid) return;
+    wBalancing = true;
+    var boxes = Object.keys(wMap).map(function (id) { return wMap[id].box; }).filter(function (b) { return !b.hidden; });
+    var panelOf = function (b) { return b.querySelector(".fbw-w-body").firstElementChild; };
+    boxes.forEach(function (b) { var p = panelOf(b); if (p) p.style.minHeight = ""; });
+    wFitAll();
+    if (window.innerWidth > 1100) {
+      var rects = boxes.map(function (b) { return b.firstElementChild.getBoundingClientRect(); });
+      boxes.forEach(function (b, i) {
+        var A = rects[i], nextTop = Infinity;
+        rects.forEach(function (B, k) {
+          if (k !== i && B.top >= A.bottom - 2 && B.left < A.right - 2 && B.right > A.left + 2 && B.top < nextTop) nextTop = B.top;
+        });
+        var gap = nextTop - A.bottom - 16, p = panelOf(b);
+        if (p && nextTop !== Infinity && gap > 6 && gap < 1200) p.style.minHeight = Math.round(p.getBoundingClientRect().height + gap) + "px";
+      });
+      wFitAll();
+    }
+    clearTimeout(wBalT); wBalT = setTimeout(function () { wBalancing = false; }, 250);
+  }
+  function wBalanceSoon() { clearTimeout(wBalQ); wBalQ = setTimeout(wBalance, 120); }
   function wApply() {
     if (!wGrid) return;
     var hidden = [];
@@ -1218,7 +1241,7 @@
     wTray.querySelector(".fbw-wtray-add").innerHTML = hidden.length
       ? hidden.map(function (it) { return '<button type="button" data-add="' + it.id + '">+ ' + escapeHtml(wMap[it.id].def.name) + '</button>'; }).join("")
       : '<span class="fbw-wtray-hint">끌어서 옮기고, 오른쪽 아래 모서리를 끌어 크기를 바꿔요</span>';
-    wFitAll();
+    wBalance();
   }
   function wItem(id) { for (var i = 0; i < wLayout.length; i++) if (wLayout[i].id === id) return wLayout[i]; return null; }
   function wMove(id, toId, after) {
@@ -1282,7 +1305,7 @@
       wGrid.appendChild(box);
       wMap[d.id] = { def: d, el: el, box: box };
       // 내용 크기가 바뀌면 줄 수 다시 계산, 권한에 따라 보였다 안 보였다 하는 위젯은 다시 배치
-      if (window.ResizeObserver) new ResizeObserver(function () { wFit(box); }).observe(box.firstElementChild);
+      if (window.ResizeObserver) new ResizeObserver(function () { wFit(box); if (!wBalancing) wBalanceSoon(); }).observe(box.firstElementChild);
       if (window.MutationObserver) new MutationObserver(function () {
         var gone = getComputedStyle(el).display === "none", it = wItem(d.id);
         if (it && box.hidden !== (it.hide || gone)) wApply();
@@ -1336,7 +1359,7 @@
       b.addEventListener("click", function () { wSetEdit(!wEdit); });
       util.insertBefore(b, util.firstChild);
     }
-    window.addEventListener("resize", wFitAll);
+    window.addEventListener("resize", wBalanceSoon);
     wLayout = wClean(wDefault(""));
     wApply();
   }
