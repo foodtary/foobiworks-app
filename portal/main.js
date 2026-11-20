@@ -1406,7 +1406,14 @@
     wkU = { name: name, code: code };
     fetch(WORKS_URL + "/rest/v1/rpc/works_login", { method: "POST", headers: { "Content-Type": "application/json", "apikey": WORKS_KEY }, body: JSON.stringify({ p_name: name, p_code: code }) })
       .then(function (r) { return r.json(); })
-      .then(function (r) { $("#fbw-works-btn").hidden = !(r && r.ok && r.is_admin); })
+      .then(function (r) {
+        $("#fbw-works-btn").hidden = !(r && r.ok && r.is_admin);
+        // 접속 기록 (관리자 통계용): 하루에 기기별 횟수만 남김
+        if (r && r.ok) {
+          var ua = navigator.userAgent || "", client = /Electron/i.test(ua) ? "pc" : /FoobiworksAndroid|Android|iPhone|iPad|iPod/i.test(ua) ? "mobile" : "web";
+          wkCall("works_ping", { p_client: client }).catch(function () {});
+        }
+      })
       .catch(function () {});
   }
   $("#fbw-works-btn").addEventListener("click", function (ev) { ev.preventDefault(); wkOpen(); });
