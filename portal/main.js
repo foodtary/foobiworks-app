@@ -1408,7 +1408,7 @@
       .then(function (r) { return r.json(); })
       .then(function (r) {
         $("#fbw-works-btn").hidden = !(r && r.ok && r.is_admin);
-        $("#fbw-meal-btn").hidden = !(r && r.ok); wkU.admin = !!(r && r.ok && r.is_admin);
+        wkU.admin = !!(r && r.ok && r.is_admin); $("#fbw-meal-btn").hidden = !wkU.admin; // 푸비웍스를 직원에게 열기 전까지는 관리자에게만 보임
         // 접속 기록 (관리자 통계용): 하루에 기기별 횟수만 남김
         if (r && r.ok) {
           var ua = navigator.userAgent || "", client = /Electron/i.test(ua) ? "pc" : /FoobiworksAndroid|Android|iPhone|iPad|iPod/i.test(ua) ? "mobile" : "web";
@@ -1430,7 +1430,7 @@
   function mlDay(v) { var p = String(v || "").split("-"); if (p.length < 3) return ""; var d = new Date(+p[0], +p[1] - 1, +p[2]); return p[1] + "." + p[2] + " (" + "일월화수목금토".charAt(d.getDay()) + ")"; }
   function mlBuild() {
     mlEl = document.createElement("div"); mlEl.className = "fbw-ml"; mlEl.hidden = true;
-    mlEl.innerHTML = '<div class="fbw-ml-top"><b>식대</b><span class="fbw-ml-seg" id="fbw-ml-seg"></span><span class="note">식대는 이제 여기에 적어요 (시트 대신)</span><button type="button" class="fbw-ml-btn" data-ml="close" style="margin-left:auto">닫기</button></div><div class="fbw-ml-body"><div class="fbw-ml-main" id="fbw-ml-main"></div><div class="fbw-ml-side" id="fbw-ml-side"></div></div>';
+    mlEl.innerHTML = '<div class="fbw-ml-top"><b>식대</b><span class="fbw-ml-seg" id="fbw-ml-seg"></span><span class="note">지금은 관리자에게만 보여요 · 직원들은 아직 시트에 적고 있어요</span><button type="button" class="fbw-ml-btn" data-ml="close" style="margin-left:auto">닫기</button></div><div class="fbw-ml-body"><div class="fbw-ml-main" id="fbw-ml-main"></div><div class="fbw-ml-side" id="fbw-ml-side"></div></div>';
     document.getElementById("fbw-portal-root").appendChild(mlEl);
     mlEl.addEventListener("click", mlClick);
     mlEl.addEventListener("input", function (ev) {
