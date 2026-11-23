@@ -1507,7 +1507,7 @@
     if (ml.manual) return '<span class="lab">결제 내역 없이 직접 입력</span><input class="fbw-ml-in" id="fbw-ml-place" placeholder="사용처 이름" value="' + escapeHtml(ml.place || "") + '"><button type="button" class="fbw-ml-btn sm" data-ml="auto" style="align-self:flex-start">결제 내역에서 찾기로 돌아가기</button>';
     if (ml.match) return '<span class="ok">결제 내역을 찾았습니다</span><span style="font-weight:600">' + escapeHtml(ml.match.place || "") + ' · ' + mlWon(ml.match.amount) + '원</span><span class="fbw-ml-hint">' + mlDay(ml.day) + ' ' + escapeHtml(ml.match.time || "") + ' 결제</span>';
     if (ml.matches && ml.matches.length > 1) return '<span class="lab">같은 금액의 결제가 여러 건이에요. 하나를 골라주세요.</span>' + ml.matches.map(function (m, i) { return '<button type="button" class="fbw-ml-btn" data-ml="pick" data-i="' + i + '" style="text-align:left">' + escapeHtml(m.time) + ' · ' + escapeHtml(m.place || "") + '</button>'; }).join("");
-    if (ml.matches) return '<span class="no">' + (ml.tooOld ? "이틀 넘게 지난 결제는 자동으로 찾을 수 없어요" : "이 날짜·금액의 결제 내역이 없어요") + '</span><span class="fbw-ml-hint">금액을 다시 확인하거나, 문자가 아직 안 들어왔으면 직접 입력하세요.</span><button type="button" class="fbw-ml-btn sm" data-ml="manual" style="align-self:flex-start">결제 내역 없이 직접 입력</button>';
+    if (ml.matches) return '<span class="no">' + (ml.tooOld ? "이틀 넘게 지난 결제는 자동으로 찾을 수 없어요" : "이 날짜·금액의 결제 내역이 없어요") + '</span><span class="fbw-ml-hint">방금 결제했다면 1~2분 뒤에 잡혀요. 이 화면에서 자동으로 다시 찾고 있어요. 기다리기 싫으면 직접 입력해도 되고, 나중에 결제 내역과 자동으로 이어져요.</span><button type="button" class="fbw-ml-btn sm" data-ml="manual" style="align-self:flex-start">결제 내역 없이 직접 입력</button>';
     return '<span class="fbw-ml-hint">날짜와 결제 금액을 넣으면 사용처를 자동으로 찾아요.</span><button type="button" class="fbw-ml-btn sm" data-ml="manual" style="align-self:flex-start">결제 내역 없이 직접 입력</button>';
   }
   function mlFind() {
@@ -1517,6 +1517,9 @@
       if (mlNum(ml.amount) !== amt) return;
       ml.matches = (r && r.ok && r.matches) || []; ml.tooOld = !!(r && r.too_old); ml.match = ml.matches.length === 1 ? ml.matches[0] : null;
       var m = $("#fbw-ml-match"); if (m) m.innerHTML = mlMatchHtml();
+      // 방금 결제한 건은 문자가 1~2분 늦게 들어올 수 있어서, 못 찾으면 20초마다 다시 찾아봄 (최대 3분)
+      clearTimeout(ml.retryT);
+      if (!ml.matches.length && !ml.tooOld && !ml.manual && ml.day === mlToday() && (ml.retryN = (ml.retryKey === ml.day + amt ? ml.retryN + 1 : 1)) <= 9) { ml.retryKey = ml.day + amt; ml.retryT = setTimeout(function () { if (!mlEl.hidden && !ml.match && !ml.manual && mlNum(ml.amount) === amt) mlFind(); }, 20000); }
       if (ml.people.length === 1 && !ml.people[0].amount) { ml.people[0].amount = amt; mlSide(); }
     }).catch(function () {});
   }
