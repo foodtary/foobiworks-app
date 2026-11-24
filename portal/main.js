@@ -1436,7 +1436,7 @@
     mlEl.addEventListener("input", function (ev) {
       var t = ev.target, i = t.getAttribute && t.getAttribute("data-pi");
       if (i != null) { ml.people[+i].amount = mlNum(t.value); mlSum(); }
-      if (t.id === "fbw-ml-amount") { ml.amount = t.value; mlSum(); }
+      if (t.id === "fbw-ml-amount") { ml.amount = t.value; if (ml.msg) { ml.msg = ""; ml.ok = false; var mg = $("#fbw-ml-msg"); if (mg) mg.textContent = ""; } mlSum(); }
       if (t.id === "fbw-ml-place") ml.place = t.value;
       if (t.id === "fbw-ml-other") { ml.other = mlNum(t.value); mlSum(); }
     });
